@@ -84,3 +84,15 @@ Plugin cấu hình mạng cho ứng dụng nhỏ:
 - Sửa đổi địa chỉ liên kết tài liệu
 03/07/2025
 - Giao diện refresh_device_info đã ngừng hoạt động
+
+---
+
+## 👤 Author
+
+* Vietnamese Translation & Documentation: **Viet Anh Dang**
+
+---
+
+## 📄 License
+
+This project is for internal use and documentation purposes only.
