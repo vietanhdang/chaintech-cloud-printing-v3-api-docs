@@ -1,0 +1,2610 @@
+{
+  "info": {
+    "_postman_id": "7931bc38-1a40-42a2-a379-5248948ada67",
+    "name": "Tài liệu hướng dẫn sử dụng API v3 của Chainko Cloud Printing.",
+    "description": "## Quy trình thao tác cơ bản:\n\n**Điều kiện tiên quyết:** Trước khi kết nối API, vui lòng đảm bảo đã liên kết thiết bị trên nền tảng mở ([https://open.liankenet.com/](https://open.liankenet.com/#/device/detail?device_id=lc27cs03124305)), xem chi tiết tại [《Thông báo quan trọng: Nâng cấp bảo mật thiết bị Lianke Cloud》](https://lianke.yuque.com/vgtche/ng6y25/gylb4owfwsn4che4?singleDoc#%E3%80%8A%E9%87%8D%E8%A6%81%E9%80%9A%E7%9F%A5%EF%BC%9A%E9%93%BE%E7%A7%91%E4%BA%91%E8%AE%BE%E5%A4%87%E5%AE%89%E5%85%A8%E6%80%A7%E5%8D%87%E7%BA%A7%E3%80%8B)\n\n1. **Bước 1 - Lấy thông tin máy in**\n\n    - Mua Cloud Box, khuyến nghị sử dụng Lianke Cloud Box, [nhấn vào đây để đặt hàng](https://shop167081082.m.youzan.com/v2/showcase/homepage?alias=W79JHvloAF)\n        \n    - Lấy `deviceId` (tài khoản đám mây) và `deviceKey` (mật khẩu đám mây) từ mã QR\n        \n2. **Bước 2 - Gửi tác vụ in**\n\n    - Thiết lập các tham số máy in và gửi tác vụ in\n        \n3. **Bước 3 - Truy vấn trạng thái in**\n\n    - Truy vấn kết quả in (có thể sử dụng callback thay thế)\n        \n\nĐịa chỉ máy chủ API: `cloud.liankenet.com`\n\n---\n\n`cloud.wisiyilink.com` **tên miền đã ngừng hoạt động, vui lòng thay đổi kịp thời, tên miền này có thể ngừng hoạt động bất cứ lúc nào** [nhấn vào đây để xem chi tiết thông báo cập nhật](https://lianke.yuque.com/vgtche/ng6y25/vywmdxu20ghmysle?singleDoc=)\n\n## Thỏa thuận API\n\n- Mỗi yêu cầu phải điền ApiKey trong phần headers _**(quan trọng, nếu không có ApiKey, Lianke sẽ không chịu trách nhiệm về việc gián đoạn dịch vụ)**_\n    \n- Vui lòng đăng ký trên nền tảng để lấy ApiKey [nhấn vào đây](https://open.liankenet.com)\n    \n\n## Cách lấy deviceId và deviceKey từ mã QR\n\n- Phân tích mã QR để lấy liên kết trang web, phân tích liên kết trang web để lấy tham số token\n    \n- Lấy giá trị token và giải mã base64, thu được chuỗi phân tách bằng dấu \":\"\n    \n- Phần trước của chuỗi là deviceId, phần sau là deviceKey\n    \n\n## SDK (cập nhật liên tục)\n\nphp sdk: [https://github.com/liankenet/cloud_printer_demo](https://github.com/liankenet/cloud_printer_demo)\n\nPlugin cấu hình mạng cho ứng dụng nhỏ:\n\n[https://mp.weixin.qq.com/wxopen/plugindevdoc?appid=wxa2a39810c572b508&token=1709758749&lang=zh_CN](https://mp.weixin.qq.com/wxopen/plugindevdoc?appid=wxa2a39810c572b508&token=1709758749&lang=zh_CN)\n\n## Bản demo thử nghiệm API\n\n[https://open.liankenet.com/api_demo/](https://open.liankenet.com/api_demo/#/home)\n\n## Lưu ý (quan trọng)\n\n- Vui lòng sử dụng [https://docs.liankenet.com/api_doc/](https://docs.liankenet.com/api_doc/) để lấy tài liệu mới nhất, tránh gặp sự cố do cập nhật phiên bản\n    \n- Vui lòng thông báo trước nếu có thời điểm lưu lượng truy cập cao để đảm bảo tính ổn định của dịch vụ\n    \n- Đây là dịch vụ chính thức, nghiêm cấm thực hiện kiểm tra tải trên API này, nếu có hành vi kiểm tra tải, sẽ bị coi là tấn công, Lianke có quyền vô hiệu hóa ApiKey và địa chỉ IP máy chủ, các hành vi tấn công gây ảnh hưởng nghiêm trọng đến hoạt động kinh doanh sẽ bị xử lý theo pháp luật\n    \n\n## Nhật ký cập nhật\n\n01/03/2022\n\n- Thêm các tham số `reportDeviceStatus`, `reportPrinterStatus` và `callbackUrl` vào giao diện in\n    \n\n01/02/2023\n\n- Thêm chức năng đẩy thông báo, có thể đẩy thông báo về trạng thái thiết bị ngoại tuyến, máy in cắm/rút, v.v. kịp thời, nếu muốn sử dụng chức năng này, vui lòng thiết lập địa chỉ callback trong trang quản trị\n    \n\n07/02/2023\n\n- Thêm API để đặt lại lỗi in liên tục\n    \n\n30/11/2023\n\n- Thêm API để xóa các tác vụ đang chờ trong hàng đợi\n    \n- Thay đổi tên miền\n    \n\n11/01/2024\n\n- Tối ưu hóa mô tả tham số jobFile khi gửi tác vụ\n    \n\n21/02/2024\n\n- Thêm mô tả tham số jpScale\n    \n\n27/09/2024\n\n- Tối ưu hóa mô tả tham số jobFile khi gửi tác vụ\n    \n\n08/10/2024\n\n- Tối ưu hóa mô tả tham số jobFile khi gửi tác vụ\n    \n\n28/10/2024\n\n- Thêm lời nhắc liên kết thiết bị trước khi kết nối\n    \n- Sửa đổi địa chỉ liên kết tài liệu\n    \n\n03/07/2025\n\n- Giao diện refresh_device_info đã ngừng hoạt động\n    \n\n26/11/2025\n\n- Thêm mô tả tham số urlFileExt",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "16113101"
+  },
+  "item": [
+    {
+      "name": "Bước 1 - Lấy thông tin máy in.",
+      "item": [
+        {
+          "name": "01-Lấy danh sách máy in của thiết bị.",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "ApiKey",
+                "value": "{{ApiKey}}",
+                "description": "API key dành cho nhà phát triển mà bạn đã đăng ký.",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/api/external_api/printer_list?deviceId={{deviceId}}&deviceKey={{deviceKey}}&printerType=1",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "api",
+                "external_api",
+                "printer_list"
+              ],
+              "query": [
+                {
+                  "key": "deviceId",
+                  "value": "{{deviceId}}",
+                  "description": "ID thiết bị"
+                },
+                {
+                  "key": "deviceKey",
+                  "value": "{{deviceKey}}",
+                  "description": "Khóa thiết bị"
+                },
+                {
+                  "key": "printerType",
+                  "value": "1",
+                  "description": "1. Máy in USB, 2. Máy in mạng, 3. Máy in USB và mạng."
+                }
+              ]
+            },
+            "description": "Giao diện này trả về danh sách thông tin máy in; theo mặc định, danh sách này là thông tin thời gian thực của Cloud Box. Nếu thông tin máy in không được làm mới sau khi thay đổi, vui lòng **nâng cấp phần mềm**.\n\nMô tả các tham số trả về:\n\n| Tham số | Mô tả |\n|---|---|\n| driver_type | 0 => Đang chờ hỗ trợ, 1 => Đã hỗ trợ, 2 => Không hỗ trợ |\n| printer_name | Tên kiểu máy in |\n| driver_name | Tương ứng với tham số printerModel của giao diện gửi |\n| isPrinter | Cho biết đây có phải là máy in hay không, ý nghĩa cụ thể của tham số được trình bày trong bảng dưới đây |\n| port | Tương ứng với devicePort, đại diện cho cổng USB thứ mấy; máy in mạng sẽ trả về 631, lúc này có thể điền 1 vào devicePort |\n| support_status | Hỗ trợ các lệnh truy vấn trạng thái máy in bổ sung, cho biết có thể gọi [Giao diện truy vấn trạng thái máy in](https://documenter.getpostman.com/view/1758872/SWE83H6u?version=latest#9966c8c3-3c94-4436-be1b-81f8e10939f4) |\n| printer_species | Loại máy in, tham khảo bảng để biết ý nghĩa |\n\nTham số máy in mạng:\n\n- ip_addr: Địa chỉ IP của máy in mạng\n- markers: Thông tin hộp mực, chỉ có ở máy in mạng\n- printer_state: Trạng thái máy in mạng, idle là trạng thái sẵn sàng, printing là đang in, stopped là máy in gặp sự cố\n\n##### Tham số isPrinter:\n\n| Giá trị | Mô tả |\n|---|---|\n| 1 | Máy in |\n| 0 | Không phải máy in (hoặc trong một số trường hợp, khi máy in ở trạng thái in, giá trị này sẽ được trả về) |\n\n---\n\n##### Tham số printer_species:\n\n| Giá trị | Mô tả |\n|---|---|\n| 0 | Không xác định |\n| 1 | Máy in kim |\n| 2 | Máy in hóa đơn |\n| 3 | Máy in nhãn |\n| 4 | Máy in laser |\n| 5 | Máy in phun mực |\n| 6 | Máy in nhiệt |\n| 7 | Máy in thẻ |"
+          },
+          "response": [
+            {
+              "name": "Ví dụ về danh sách máy in.",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "ApiKey",
+                    "value": "{{ApiKey}}",
+                    "description": "API key dành cho nhà phát triển mà bạn đã đăng ký.",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "https://{{url}}/api/external_api/printer_list?deviceId={{deviceId}}&deviceKey={{deviceKey}}&printerType=1",
+                  "protocol": "https",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "external_api",
+                    "printer_list"
+                  ],
+                  "query": [
+                    {
+                      "key": "deviceId",
+                      "value": "{{deviceId}}",
+                      "description": "ID thiết bị"
+                    },
+                    {
+                      "key": "deviceKey",
+                      "value": "{{deviceKey}}",
+                      "description": "Khóa thiết bị"
+                    },
+                    {
+                      "key": "printerType",
+                      "value": "1",
+                      "description": "1. Máy in USB, 2. Máy in mạng, 3. Máy in USB và mạng."
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Date",
+                  "value": "Tue, 05 Dec 2023 03:46:11 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "Content-Encoding",
+                  "value": "br"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"code\": 200,\n    \"data\": {\n        \"row\": [\n            {\n                \"MDL\": \"MA2000w\",\n                \"device\": null,\n                \"drivce_name\": \"Kyocera MA2000w GX\",\n                \"driver_name\": \"Kyocera MA2000w GX\",\n                \"driver_type\": 1,\n                \"id\": 611757,\n                \"idProduct\": null,\n                \"idVendor\": null,\n                \"isPrinter\": 1,\n                \"port\": 1,\n                \"printer_name\": \"Kyocera MA2000w GX\",\n                \"printer_state\": \"outOfPaper\",\n                \"product\": \"MA2000w\",\n                \"species\": 4,\n                \"support_status\": true,\n                \"vendor\": null\n            },\n            {\n                \"MDL\": \"\",\n                \"device\": null,\n                \"drivce_name\": \"ESC/POS通用驱动(203dpi) 模式2\",\n                \"driver_name\": \"ESC/POS通用驱动(203dpi) 模式2\",\n                \"driver_type\": 1,\n                \"id\": 611809,\n                \"idProduct\": null,\n                \"idVendor\": null,\n                \"isPrinter\": 1,\n                \"port\": 2,\n                \"printer_name\": \"ESC/POS通用驱动(203dpi) 模式2\",\n                \"printer_state\": \"idle\",\n                \"product\": \"BAR PRINTER\",\n                \"species\": 0,\n                \"support_status\": false,\n                \"vendor\": null\n            },\n            {\n                \"MDL\": \"e-STUDIO2323AM Printer\",\n                \"device\": null,\n                \"drivce_name\": \"TOSHIBA e-STUDIO2323AMSeries GDI\",\n                \"driver_name\": \"TOSHIBA e-STUDIO2323AMSeries GDI\",\n                \"driver_type\": 1,\n                \"id\": 612554,\n                \"idProduct\": null,\n                \"idVendor\": null,\n                \"isPrinter\": 1,\n                \"port\": 3,\n                \"printer_name\": \"TOSHIBA e-STUDIO2323AMSeries GDI\",\n                \"printer_state\": \"outOfPaper\",\n                \"product\": \"TOSHIBA e-STUDIO2323AM Scanner\",\n                \"species\": 4,\n                \"support_status\": false,\n                \"vendor\": null\n            }\n        ],\n        \"total\": 3\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "02-Lấy thông số máy in [Vui lòng lưu dữ liệu vào bộ nhớ cache sau khi gọi hàm].",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "ApiKey",
+                "value": "{{ApiKey}}",
+                "description": "API key dành cho nhà phát triển mà bạn đã đăng ký.",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/api/print/printer_params?printerModel={{printerModel}}",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "api",
+                "print",
+                "printer_params"
+              ],
+              "query": [
+                {
+                  "key": "printerModel",
+                  "value": "{{printerModel}}",
+                  "description": "Mẫu máy in, tương ứng với `driver_name` trong `printer_list`."
+                }
+              ]
+            },
+            "description": "Lấy các tham số của thiết bị máy in đích:\n\n*   `printerModel`: Tên kiểu máy in, tương ứng với `driver_name` trong `printer_list`.\n\nCác giá trị tham số lấy được sẽ được điền vào giao diện API `api/print/job`."
+          },
+          "response": [
+            {
+              "name": "03 - Lấy các thông số của máy in.",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "ApiKey",
+                    "value": "xxxxx",
+                    "description": "API key dành cho nhà phát triển mà bạn đã đăng ký.",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "https://{{url}}/api/print/printer_params?printerModel=HP LaserJet P1007",
+                  "protocol": "https",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "print",
+                    "printer_params"
+                  ],
+                  "query": [
+                    {
+                      "key": "printerModel",
+                      "value": "HP LaserJet P1007",
+                      "description": "Mẫu máy in (vui lòng chọn từ danh sách các mẫu được hỗ trợ)."
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Server",
+                  "value": "nginx"
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 30 Dec 2019 05:34:51 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "2667"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Access-Control-Allow-Methods",
+                  "value": "GET, POST, OPTIONS, DELETE"
+                },
+                {
+                  "key": "Access-Control-Allow-Headers",
+                  "value": "DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Authorization,ApiKey"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"code\": 200,\n    \"msg\": \"success\",\n    \"data\": {\n        \"Capabilities\": {\n            \"Bins\": {\n                \"在纸盘 1 中手动进纸\": 4,\n                \"纸盘 1\": 1,\n                \"自动选择\": 7\n            },\n            \"Color\": {\n                \"黑白\": 1\n            },\n            \"Copies\": 999,\n            \"Duplex\": {\n                \"关闭\": 1,\n                \"短边\": 3,\n                \"长边\": 2\n            },\n            \"MediaTypes\": {\n                \"默认\": 0\n            },\n            \"Orientation\": {\n                \"横向\": 2,\n                \"竖向\": 1\n            },\n            \"Papers\": {\n                \"10 号信封\": 20,\n                \"16 开 184x260 毫米\": 263,\n                \"16 开 195x270 毫米\": 264,\n                \"16 开 197x273 毫米\": 265,\n                \"8.5x13（自定义）\": 258,\n                \"A4\": 9,\n                \"A5\": 11,\n                \"A6\": 70,\n                \"B5 (JIS)\": 13,\n                \"B5 信封\": 34,\n                \"C5 信封\": 28,\n                \"DL 信封\": 27,\n                \"Double Japan Postcard Rotated\": 82,\n                \"Executive\": 7,\n                \"Japanese Postcard\": 43,\n                \"Legal\": 5,\n                \"Letter\": 1,\n                \"Monarch 信封\": 37,\n                \"A4连续纸(22.86x27.96)\\r\\n\": 512,\n                \"A4连续纸(24.1x27.96)\\r\\n\": 513,\n                \"A4连续纸(21x27.96)\": 514,\n                \"A4连续纸(21.6x27.9)\": 515,\n                \"A4连续纸二等分(22.86x13.98)\": 516,\n                \"A4连续纸二等分(24.1x14)\": 517,\n                \"A4连续纸二等分(21x13.98)\": 518,\n                \"A4连续纸二等分(21.6x13.95)\": 519,\n                \"A4连续纸三等分(22.86x9.32)\": 520,\n                \"A4连续纸三等分(24.1x9.32)\": 521,\n                \"A4连续纸三等分(21x9.32)\": 522,\n                \"A4连续纸三等分(21.6x9.3)\": 523,\n                \"A4连续纸不分页(22.86x500)\": 524,\n                \"A4连续纸不分页(24.1x500)\": 525,\n                \"A4连续纸不分页(21x500)\": 526,\n                \"A4连续纸不分页(21.6x500)\": 527,\n                \"标签纸（80x200mm）\": 528,\n                \"标签纸（80x100mm）\": 529,\n                \"A4连续纸(24.10x27.90)\": 530\n            },\n            \"Resolutions\": null\n        },\n        \"DevMode\": {\n            \"BitsPerPel\": 0,\n            \"Collate\": 0,\n            \"Color\": 1,\n            \"Copies\": 1,\n            \"DefaultSource\": 7,\n            \"DeviceName\": [\n                72,\n                80,\n                32,\n                76,\n                97,\n                115,\n                101,\n                114,\n                74,\n                101,\n                116,\n                32,\n                80,\n                49,\n                48,\n                48,\n                55,\n                0,\n                0,\n                0,\n                0,\n                0,\n                0,\n                0,\n                0,\n                0,\n                0,\n                0,\n                0,\n                0,\n                0,\n                0\n            ],\n            \"DisplayFlags\": 0,\n            \"DisplayFrequency\": 0,\n            \"DitherType\": 0,\n            \"DriverExtra\": 821,\n            \"DriverVersion\": 3,\n            \"Duplex\": 1,\n            \"Fields\": 40719,\n            \"FormName\": [\n                0,\n                0,\n                0,\n                0,\n                0,\n                0,\n                0,\n                0,\n                0,\n                0,\n                0,\n                0,\n                0,\n                0,\n                0,\n                0,\n                0,\n                0,\n                0,\n                0,\n                0,\n                0,\n                0,\n                0,\n                0,\n                0,\n                0,\n                0,\n                0,\n                0,\n                0,\n                0\n            ],\n            \"ICMIntent\": 0,\n            \"ICMMethod\": 0,\n            \"LogPixels\": 0,\n            \"MediaType\": 0,\n            \"Orientation\": 1,\n            \"PanningHeight\": 0,\n            \"PanningWidth\": 0,\n            \"PaperLength\": 2970,\n            \"PaperSize\": 9,\n            \"PaperWidth\": 2100,\n            \"PelsHeight\": 0,\n            \"PelsWidth\": 0,\n            \"PrintQuality\": 600,\n            \"Reserved1\": 0,\n            \"Reserved2\": 0,\n            \"Scale\": 0,\n            \"Size\": 220,\n            \"SpecVersion\": 1025,\n            \"TTOption\": 0,\n            \"YResolution\": 0\n        },\n        \"DeviceContext\": {\n            \"BitsPixel\": 8,\n            \"HorzRes\": 4736,\n            \"HorzSize\": 200,\n            \"LogPixelsX\": 600,\n            \"LogPixelsY\": 600,\n            \"NumColors\": 256,\n            \"PhysicalHeight\": 7016,\n            \"PhysicalOffsetX\": 94,\n            \"PhysicalOffsetY\": 94,\n            \"PhysicalWidth\": 4961,\n            \"VertRes\": 6824,\n            \"VertSize\": 289\n        },\n        \"Name\": \"HP LaserJet P1007\"\n    }\n}"
+            }
+          ]
+        }
+      ],
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              ""
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              ""
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Bước 2 - Gửi công việc in.",
+      "item": [
+        {
+          "name": "Gửi yêu cầu in (cách sử dụng cơ bản)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "// save JWT value for auth",
+                  "pm.environment.set(\"task_id\", jsonData.data.task_id);",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "ApiKey",
+                "value": "{{ApiKey}}",
+                "description": "API key dành cho nhà phát triển mà bạn đã đăng ký."
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "description": "(Bắt buộc) ID thiết bị",
+                  "key": "deviceId",
+                  "type": "text",
+                  "value": "{{deviceId}}"
+                },
+                {
+                  "description": "(Bắt buộc) Khóa thiết bị.",
+                  "key": "deviceKey",
+                  "type": "text",
+                  "value": "{{deviceKey}}"
+                },
+                {
+                  "key": "devicePort",
+                  "value": "{{devicePort}}",
+                  "description": "Cổng thiết bị, mặc định là cổng USB1. Nhập giá trị bằng số. Nếu có nhiều thiết bị sử dụng cổng USB, mục này phải được điền.",
+                  "type": "text"
+                },
+                {
+                  "description": "(Bắt buộc) Tệp nhiệm vụ<br/>\nHỗ trợ hình ảnh, tệp Office, tệp PDF, tệp HTML (tham số phải ở định dạng formfile)<br/>\nHỗ trợ địa chỉ liên kết, nhiều liên kết, vui lòng nối bằng ký tự xuống dòng \\n (tham số phải ở định dạng chuỗi)<br/>\n> Lưu ý: Nếu tham số này là chuỗi văn bản thuần túy, nó sẽ được xử lý như một liên kết. Vì vậy, nếu bạn muốn truyền chuỗi HTML, bạn cần lưu nội dung HTML thành tệp HTML trước, sau đó xử lý nó như một tệp.\n> Ngoài ra, nếu bạn muốn truyền trực tiếp tập lệnh máy in, chẳng hạn như tập lệnh ESC cho hóa đơn, bạn cần lưu tập lệnh thành tệp .prn và xử lý nó như một tệp (trong trường hợp này, các tham số in khác sẽ không có hiệu lực và máy in sẽ thực hiện hoàn toàn theo tập lệnh được truyền).\n> Không hỗ trợ các khung giao diện người dùng phức tạp, chẳng hạn như Vue. Vui lòng giảm thiểu độ phức tạp của logic hiển thị để tránh lỗi hiển thị.\n> Nếu sử dụng liên kết, bạn cần truyền thêm tham số urlFileExt.",
+                  "key": "jobFile",
+                  "type": "file",
+                  "src": "WechatIMG8442.jpg"
+                },
+                {
+                  "description": "(Bắt buộc) Kích thước giấy in<br/>\n9: A4<br/>\n11: A5<br/>\n- Giá trị có thể: Lấy thông số máy in: `Capabilities -> Papers`<br/>\n- Giá trị mặc định: Lấy thông số máy in: `DevMode -> PaperSize`<br/>\n\n**Lưu ý, khi sử dụng kích thước giấy tùy chỉnh, giá trị này phải được đặt thành `0`**",
+                  "key": "dmPaperSize",
+                  "type": "text",
+                  "value": "9"
+                },
+                {
+                  "description": "(Bắt buộc) Tự động điều chỉnh kích thước<br/>\n4: Tự động điều chỉnh (khuyến nghị)<br/>\n0: In ảnh gốc (có thể quá nhỏ do độ phân giải)<br/>\n1: Ưu tiên chiều rộng (cắt chiều cao nếu vượt quá)<br/>\n2: Ưu tiên chiều cao (cắt chiều rộng nếu vượt quá)<br/>\n3: Kéo giãn toàn bộ ảnh<br/>\nxx%: Tùy chỉnh, phần trăm kích thước so với khổ giấy<br/>",
+                  "key": "jpAutoScale",
+                  "type": "text",
+                  "value": "4"
+                },
+                {
+                  "key": "jpScale",
+                  "value": "fit",
+                  "description": "Tự động điều chỉnh kích thước (thay thế cho `jpAutoScale`, ưu tiên sử dụng tham số này)<br/>\n`fit`: Tự động điều chỉnh<br/>\n`fitw`: Ưu tiên chiều rộng (cắt chiều cao nếu vượt quá)<br/>\n`fith`: Ưu tiên chiều cao (cắt chiều rộng nếu vượt quá)<br/>\n`fill`: Kéo giãn toàn bộ hình ảnh (hình ảnh có thể bị biến dạng)<br/>\n`cover`: Tự động cắt, lấp đầy trang giấy<br/>\n`xx%`: Tùy chỉnh, chiếm phần trăm diện tích trang giấy<br/>\n`none`: Tắt điều chỉnh kích thước, sử dụng độ phân giải gốc của hình ảnh và độ phân giải của máy in<br/>",
+                  "type": "text"
+                },
+                {
+                  "description": "Hướng in giấy<br/>\n1: Dọc<br/>\n2: Ngang<br/>\n- Giá trị mặc định: Lấy thông số máy in: `DevMode -> Orientation`",
+                  "key": "dmOrientation",
+                  "type": "text",
+                  "value": "1"
+                },
+                {
+                  "description": "Số lượng bản in<br/>\n1: In một bản<br/>\n- Số lượng bản in tối đa không được vượt quá thông số kỹ thuật của máy in: `Capabilities -> Copies`",
+                  "key": "dmCopies",
+                  "type": "text",
+                  "value": "1"
+                },
+                {
+                  "description": "In màu<br/>\n1: Đen trắng<br/>\n2: Màu<br/>\n- Giá trị mặc định: Lấy thông số máy in: `DevMode -> Color`",
+                  "key": "dmColor",
+                  "type": "text",
+                  "value": "1"
+                },
+                {
+                  "key": "urlFileExt",
+                  "value": ".pdf",
+                  "description": "Chỉ định định dạng tệp liên kết bằng cách sử dụng phần mở rộng tệp, ví dụ: .pdf | .png, v.v. (các định dạng được hỗ trợ).",
+                  "type": "text",
+                  "uuid": "24f5cdd9-4d40-42ac-b947-f9c9e49190ce",
+                  "disabled": true
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{url}}/api/print/job",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "api",
+                "print",
+                "job"
+              ]
+            },
+            "description": "Gửi yêu cầu in\n\nĐịnh dạng `form-data`, không phải JSON.\nLoại tham số đầu vào `content-type` là `form-data`.\n\nĐây là một API không đồng bộ, việc gọi API sẽ không bị chặn và sẽ trả về kết quả ngay lập tức. Kết quả trả về lúc này chỉ cho biết yêu cầu đã được chấp nhận thành công, chứ không phải là quá trình in đã hoàn tất.\n\nKhi API này gửi yêu cầu thành công, nó sẽ trả về `task_id` do hệ thống tạo ra, đây là ID duy nhất của nhiệm vụ, có thể được sử dụng để truy vấn trạng thái nhiệm vụ hoặc hủy nhiệm vụ sau này."
+          },
+          "response": [
+            {
+              "name": "Gửi công việc in.",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "ApiKey",
+                    "value": "",
+                    "description": "API key dành cho nhà phát triển mà bạn đã đăng ký.",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "description": "ID thiết bị",
+                      "key": "deviceId",
+                      "type": "text",
+                      "value": "wsyl-test-01"
+                    },
+                    {
+                      "description": "Khóa thiết bị",
+                      "key": "deviceKey",
+                      "type": "text",
+                      "value": "wsyl-test-01"
+                    },
+                    {
+                      "description": "Cổng thiết bị:\n1: USB1\n2: USB2\n...",
+                      "key": "devicePort",
+                      "type": "text",
+                      "value": "1"
+                    },
+                    {
+                      "description": "Mẫu máy in (tương ứng với tham số `device_name` trong giao diện danh sách máy in `printer_list`).",
+                      "key": "printerModel",
+                      "type": "text",
+                      "value": "HP LaserJet P1007"
+                    },
+                    {
+                      "description": "Tệp công việc<br/>\nHỗ trợ các loại tệp văn phòng thông dụng, tệp hình ảnh, tệp HTML, v.v.",
+                      "key": "jobFile",
+                      "type": "file",
+                      "src": "/Users/weijiangchen/Downloads/Bản sao 2(1).pdf"
+                    },
+                    {
+                      "description": "Kích thước giấy in<br/>\n9: A4<br/>\n11: A5<br/>\n- Giá trị có thể: Lấy thông số máy in: `Capabilities -> Papers`<br/>\n- Giá trị mặc định: Lấy thông số máy in: `DevMode -> PaperSize`<br/>\n\n**Lưu ý, khi sử dụng kích thước giấy tùy chỉnh, giá trị này phải được đặt thành `0`**",
+                      "key": "dmPaperSize",
+                      "type": "text",
+                      "value": "9"
+                    },
+                    {
+                      "description": "Hướng in giấy<br/>\n1: Dọc<br/>\n2: Ngang<br/>\n- Giá trị mặc định: Lấy thông số máy in: `DevMode -> Orientation`",
+                      "key": "dmOrientation",
+                      "type": "text",
+                      "value": "1"
+                    },
+                    {
+                      "description": "Số lượng bản in<br/>\n1: In một bản<br/>\n- Số lượng tối đa không được vượt quá thông số của máy in: `Capabilities -> Copies`",
+                      "key": "dmCopies",
+                      "type": "text",
+                      "value": "1"
+                    },
+                    {
+                      "description": "Nguồn giấy<br/>\n- Giá trị có thể: Lấy thông số máy in: `Capabilities -> Bins`<br>\n- Giá trị mặc định: Lấy thông số máy in: `DevMode -> DefaultSource`",
+                      "key": "dmDefaultSource",
+                      "type": "text",
+                      "value": "1"
+                    },
+                    {
+                      "description": "In màu<br/>\n1: Đen trắng<br/>\n2: Màu<br/>\n- Giá trị mặc định: Lấy thông số máy in: `DevMode -> Color`",
+                      "key": "dmColor",
+                      "type": "text",
+                      "value": "1"
+                    },
+                    {
+                      "description": "In hai mặt<br/>\n1: Tắt<br/>\n2: Cạnh dài<br/>\n3: Cạnh ngắn<br/>\n- Giá trị mặc định: Lấy thông số máy in: `DevMode -> Duplex`",
+                      "key": "dmDuplex",
+                      "type": "text",
+                      "value": "1"
+                    },
+                    {
+                      "description": "Loại giấy in<br/>\n- Giá trị có thể: Lấy thông số máy in: `Capabilities -> MediaTypes`<br/>\n- Giá trị mặc định: Lấy thông số máy in: `DevMode -> MediaType`",
+                      "key": "dmMediaType",
+                      "type": "text",
+                      "value": "0"
+                    },
+                    {
+                      "description": "Phạm vi số trang tài liệu<br/>\nVí dụ: 1,2,3,4,5-10<br/>\n(Để trống để in tất cả các trang)",
+                      "key": "jpPageRange",
+                      "type": "text",
+                      "value": "1,2,3,4",
+                      "disabled": true
+                    },
+                    {
+                      "description": "Tự động xoay tài liệu<br/>\n0: Tắt (mặc định)<br/>\n1: Bật",
+                      "key": "jpAutoRotate",
+                      "type": "text",
+                      "value": "0"
+                    },
+                    {
+                      "description": "Tự động điều chỉnh kích thước<br/>\n4: Tự động điều chỉnh<br/>\n0: In theo kích thước gốc<br/>\n3: Kéo giãn toàn bộ hình ảnh<br/>\nxx%: Tùy chỉnh, tỷ lệ phần trăm so với kích thước giấy<br/>",
+                      "key": "jpAutoScale",
+                      "type": "text",
+                      "value": "90%",
+                      "disabled": true
+                    },
+                    {
+                      "description": "Tự động căn chỉnh<br/>\n<Trống>: Góc trên bên trái (tương tự như z1, mặc định)<br/>\nz1: Góc trên bên trái<br/>\nz4: Giữa bên trái<br/>\nz7: Góc dưới bên trái<br/>\nz2: Góc trên bên phải<br/>\nz5: Giữa<br/>\nz8: Góc dưới bên phải<br/>\nz3: Góc trên bên phải<br/>\nz6: Giữa bên phải<br/>\nz9: Góc dưới bên phải<br/>",
+                      "key": "jpAutoAlign",
+                      "type": "text",
+                      "value": "z1",
+                      "disabled": true
+                    },
+                    {
+                      "key": "dmPaperLength",
+                      "value": "",
+                      "description": "Chiều cao tùy chỉnh, có hiệu lực khi dmPaperSize bằng 0, đơn vị là 0,1 mm.",
+                      "type": "text",
+                      "disabled": true
+                    },
+                    {
+                      "key": "dmPaperWidth",
+                      "value": "",
+                      "description": "Chiều rộng tùy chỉnh, có hiệu lực khi dmPaperSize bằng 0, đơn vị là 0,1 mm.",
+                      "type": "text",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "https://{{url}}/api/print/job",
+                  "protocol": "https",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "print",
+                    "job"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Server",
+                  "value": "nginx"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 05 Jan 2020 12:55:20 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "87"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Access-Control-Allow-Methods",
+                  "value": "GET, POST, OPTIONS, DELETE"
+                },
+                {
+                  "key": "Access-Control-Allow-Headers",
+                  "value": "DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Authorization,ApiKey"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"code\": 200,\n    \"msg\": \"success\",\n    \"data\": {\n        \"task_id\": \"581decf2-c6f6-4163-8646-5dcc0c3c1c05\"\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Gửi công việc in (các tùy chọn nâng cao)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "// save JWT value for auth",
+                  "pm.environment.set(\"task_id\", jsonData.data.task_id);",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "ApiKey",
+                "value": "{{ApiKey}}",
+                "description": "API key dành cho nhà phát triển mà bạn đã đăng ký."
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "description": "(Bắt buộc) ID thiết bị",
+                  "key": "deviceId",
+                  "type": "text",
+                  "value": "{{deviceId}}"
+                },
+                {
+                  "description": "(Bắt buộc) Khóa thiết bị.",
+                  "key": "deviceKey",
+                  "type": "text",
+                  "value": "{{deviceKey}}"
+                },
+                {
+                  "description": "(Tùy chọn) Cổng thiết bị:\n1: USB1\n2: USB2\n...",
+                  "key": "devicePort",
+                  "type": "text",
+                  "value": "{{devicePort}}"
+                },
+                {
+                  "description": "(Tùy chọn) Tên kiểu máy in (tương ứng với tham số `driver_name` trong giao diện danh sách máy in `printer_list`).",
+                  "key": "printerModel",
+                  "type": "text",
+                  "value": "{{printerModel}}"
+                },
+                {
+                  "description": "(Bắt buộc) Tệp nhiệm vụ<br/>\nHỗ trợ các loại tệp: hình ảnh, tệp Office, tệp PDF, tệp HTML (định dạng formdata)<br/>\nHỗ trợ địa chỉ liên kết; nếu có nhiều liên kết, hãy nối chúng bằng ký tự xuống dòng (\\n) (định dạng chuỗi)<br/>",
+                  "key": "jobFile",
+                  "type": "file",
+                  "fileNotInWorkingDirectoryWarning": "This file isn't in your working directory. Teammates you share this request with won't be able to use this file. To make collaboration easier you can setup your working directory in Settings.",
+                  "filesNotInWorkingDirectory": [
+                    "/D:/Stocks/Messy/5270.png"
+                  ],
+                  "src": "/D:/Stocks/Messy/5270.png"
+                },
+                {
+                  "description": "(Bắt buộc) Kích thước giấy in<br/>\n9: A4<br/>\n11: A5<br/>\n- Giá trị có thể: Lấy thông số máy in: `Capabilities -> Papers`<br/>\n- Giá trị mặc định: Lấy thông số máy in: `DevMode -> PaperSize`<br/>\n\n**Lưu ý, khi sử dụng kích thước giấy tùy chỉnh, giá trị này phải được đặt thành `0`**",
+                  "key": "dmPaperSize",
+                  "type": "text",
+                  "value": "9"
+                },
+                {
+                  "description": "Hướng in giấy<br/>\n1: Dọc<br/>\n2: Ngang<br/>\n- Giá trị mặc định: Lấy thông số máy in: `DevMode -> Orientation`",
+                  "key": "dmOrientation",
+                  "type": "text",
+                  "value": "1"
+                },
+                {
+                  "description": "Số lượng bản in<br/>\n1: In một bản<br/>\n- Số lượng bản in tối đa không được vượt quá thông số kỹ thuật của máy in: `Capabilities -> Copies`",
+                  "key": "dmCopies",
+                  "type": "text",
+                  "value": "1"
+                },
+                {
+                  "description": "Nguồn giấy<br/>\n- Giá trị có thể: Lấy thông số máy in: `Capabilities -> Bins`<br>\n- Giá trị mặc định: Lấy thông số máy in: `DevMode -> DefaultSource`",
+                  "key": "dmDefaultSource",
+                  "type": "text",
+                  "value": "1"
+                },
+                {
+                  "description": "In màu<br/>\n1: Đen trắng<br/>\n2: Màu<br/>\n- Giá trị mặc định: Lấy thông số máy in: `DevMode -> Color`",
+                  "key": "dmColor",
+                  "type": "text",
+                  "value": "1"
+                },
+                {
+                  "description": "In hai mặt<br/>\n1: Tắt<br/>\n2: Cạnh dài<br/>\n3: Cạnh ngắn<br/>\n- Giá trị mặc định: Lấy thông số máy in: `DevMode -> Duplex`",
+                  "key": "dmDuplex",
+                  "type": "text",
+                  "value": "1"
+                },
+                {
+                  "description": "Loại giấy in<br/>\n- Giá trị có thể: Lấy thông số máy in: `Capabilities -> MediaTypes`<br/>\n- Giá trị mặc định: Lấy thông số máy in: `DevMode -> MediaType`",
+                  "key": "dmMediaType",
+                  "type": "text",
+                  "value": "256",
+                  "disabled": true
+                },
+                {
+                  "key": "dmPaperLength",
+                  "value": "300",
+                  "description": "Chiều cao tùy chỉnh, có hiệu lực khi dmPaperSize bằng 0, đơn vị là 0,1 mm.",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "dmPaperWidth",
+                  "value": "200",
+                  "description": "Chiều rộng tùy chỉnh, có hiệu lực khi dmPaperSize bằng 0, đơn vị là 0,1 mm.",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "dmPrintQuality",
+                  "value": "",
+                  "description": "Chất lượng in, các giá trị có thể chọn là -1, -2, -3, -4; -1 là chất lượng thấp nhất, -4 là chất lượng cao nhất.",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "isPreview",
+                  "value": "1",
+                  "description": "Xem trước, mặc định là 0, nếu `isPreview=1` thì kết quả của tác vụ sẽ trả về ảnh xem trước.",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "htmlKernel",
+                  "value": "wkhtml",
+                  "description": "Công cụ chuyển đổi HTML, mặc định là chrometopdf.<br/>\nCác tùy chọn: wkhtml, chrometopdf, wkhtmltopdf.<br/>\nNên chọn wkhtmltopdf hoặc chrometopdf để hỗ trợ tự động phân trang.\n\nLưu ý: Thành phần wkhtml có thể bị loại bỏ trong tương lai, vui lòng ưu tiên chọn chrometopdf.",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "description": "Nếu muốn gửi bản in đến máy in được kết nối với mạng cục bộ, vui lòng nhập địa chỉ IP của máy in. Trong trường hợp này, giá trị của `device_port` phải luôn là 1.",
+                  "key": "targetIp",
+                  "type": "text",
+                  "value": "192.168.1.1",
+                  "disabled": true
+                },
+                {
+                  "description": "Phạm vi số trang tài liệu<br/>\nVí dụ: 1,2,3,4,5-10<br/>\n(Để trống để in tất cả các trang)\n\nGiá trị đặc biệt:\n-1: In các trang lẻ\n-2: In các trang chẵn",
+                  "key": "jpPageRange",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "description": "(Bắt buộc) Tự động điều chỉnh kích thước<br/>\n4: Tự động điều chỉnh (khuyến nghị)<br/>\n0: In ảnh gốc (có thể quá nhỏ do độ phân giải)<br/>\n1: Ưu tiên chiều rộng (cắt chiều cao nếu vượt quá)<br/>\n2: Ưu tiên chiều cao (cắt chiều rộng nếu vượt quá)<br/>\n3: Kéo giãn toàn bộ ảnh<br/>\nxx%: Tùy chỉnh, phần trăm diện tích trên trang giấy<br/>",
+                  "key": "jpAutoScale",
+                  "type": "text",
+                  "value": "4"
+                },
+                {
+                  "key": "jpScale",
+                  "value": "fit",
+                  "description": "Tự động điều chỉnh kích thước (thay thế cho `jpAutoScale`, ưu tiên sử dụng tham số này)<br/>\n`fit`: Tự động điều chỉnh<br/>\n`fitw`: Ưu tiên chiều rộng (cắt chiều cao nếu vượt quá)<br/>\n`fith`: Ưu tiên chiều cao (cắt chiều rộng nếu vượt quá)<br/>\n`fill`: Kéo giãn toàn bộ hình ảnh (hình ảnh có thể bị biến dạng)<br/>\n`cover`: Tự động cắt, lấp đầy trang giấy<br/>\n`xx%`: Tùy chỉnh, chiếm phần trăm diện tích trang giấy<br/>\n`none`: Tắt điều chỉnh kích thước, sử dụng độ phân giải gốc của hình ảnh và độ phân giải của máy in<br/>",
+                  "type": "text"
+                },
+                {
+                  "description": "Tự động căn chỉnh<br/>\n<Trống>: Góc trên bên trái (tương tự như z1, mặc định)<br/>\nz1: Góc trên bên trái<br/>\nz4: Giữa bên trái<br/>\nz7: Góc dưới bên trái<br/>\nz2: Góc trên bên phải<br/>\nz5: Giữa<br/>\nz8: Góc dưới bên phải<br/>\nz3: Góc trên bên phải<br/>\nz6: Giữa bên phải<br/>\nz9: Góc dưới bên phải<br/>",
+                  "key": "jpAutoAlign",
+                  "type": "text",
+                  "value": "z5"
+                },
+                {
+                  "key": "reportDeviceStatus",
+                  "value": "1",
+                  "description": "Mặc định tính năng này được bật; nó sẽ chặn các tác vụ khi trạng thái thiết bị bất thường; giá trị trả về là:<br/>\n5001: Thiết bị chưa được kết nối mạng.<br/>\n5002: Thiết bị đã ngoại tuyến.<br/>\n\nKhi thiết bị kết nối lại, hạn chế sẽ được gỡ bỏ ngay lập tức; nếu chỉ rút nguồn điện, thông báo ngoại tuyến sẽ xuất hiện sau khoảng 1 phút.",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "reportPrinterStatus",
+                  "value": "1",
+                  "description": "Chặn các tác vụ báo cáo trạng thái bất thường của máy in; giá trị trả về<br/>\n5011: Giao diện USB này chưa được kết nối với máy in.<br/>\n\nKhi hệ thống trả về mã lỗi này, hệ thống sẽ tự động làm mới thông tin thiết bị.",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "callbackUrl",
+                  "value": "https://xxx.com/xxxxx",
+                  "description": "Hàm gọi lại sau khi in, sau khi in xong, kết quả tương ứng sẽ được gửi đến URL này. URL này phải là liên kết HTTPS. Nếu mã trạng thái HTTP trả về là 200, hệ thống sẽ xác nhận đã nhận được. Nếu không, hệ thống sẽ thử lại ba lần (với khoảng thời gian là 0, 5 và 10 giây) trước khi từ bỏ.",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "taskTicket",
+                  "value": "xxxx",
+                  "description": "Xem trước và trả về thông tin xác thực của tác vụ, tái sử dụng các tệp trung gian, việc truyền tham số có thể rút ngắn thời gian thực hiện tác vụ in lần này (lưu ý: tham số này sẽ khiến tham số jobFile không còn hiệu lực).",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "errLimitNum",
+                  "value": "30",
+                  "description": "Số lượng tối đa các lần thực hiện không thành công liên tiếp cho một tác vụ, số lần không thành công liên tiếp được phép, mặc định là 30, và không được vượt quá 30.",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "pdfRev",
+                  "value": "0",
+                  "description": "Chức năng đảo ngược thứ tự tài liệu chỉ áp dụng cho các tệp thuộc loại tài liệu, không áp dụng cho hình ảnh; 0 là tắt, 1 là bật.",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "jpAutoRotate",
+                  "value": "0",
+                  "description": "Chức năng tự động xoay. Nên bật chức năng này khi in tài liệu để khắc phục tình trạng một số tài liệu có trang ngang và trang dọc xen kẽ. 0: tắt, 1: bật.",
+                  "type": "text",
+                  "disabled": true
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{url}}/api/print/job",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "api",
+                "print",
+                "job"
+              ]
+            },
+            "description": "Dưới đây là một số tham số bổ sung khi gửi yêu cầu.\n\nĐịnh dạng `form-data`, không phải JSON.\nLoại tham số đầu vào `content-type` là `form-data`.\n\nAPI này là API không đồng bộ, việc gọi không chặn, sẽ trả về kết quả ngay lập tức. Kết quả trả về lúc này chỉ cho biết yêu cầu đã được chấp nhận thành công, **chứ không phải là quá trình in đã hoàn tất.**\n\nKhi API này gửi yêu cầu thành công, nó sẽ trả về `task_id` do hệ thống tạo ra làm ID duy nhất cho yêu cầu. ID này có thể được sử dụng để truy vấn trạng thái yêu cầu hoặc hủy yêu cầu sau này.\n\n---\n\nGiải thích về chức năng gọi lại `callbackUrl`:\n\n- Yêu cầu gọi lại là yêu cầu POST, URL gọi lại có thể chứa các tham số. Dữ liệu POST có định dạng JSON, ví dụ như sau:\n\n```json\n{'device_id': 'lk112312312312', 'task_id': 'bd85931c-38fa-4891-b1fa-5e1cf160ec12', 'task_state': 'SUCCESS', 'create_time': '2022-03-01 17:15:02', 'finish_time': '2022-03-01 17:30:58', 'task_result': {'code': 503, 'msg': 'Thiết bị kết nối không ổn định, vui lòng kiểm tra kết nối mạng của thiết bị'}}\n```\n\nGiải thích về `errLimitNum`:\n\nGiá trị này đại diện cho số lượng tối đa các yêu cầu liên tiếp bị lỗi được phép, mặc định là 30. Sau khi đạt đến giới hạn này, giá trị trả về sẽ là:\n\n```json\n{\"code\": 11203, \"msg\": \"Số lượng yêu cầu liên tiếp bị lỗi vượt quá %d lần, thiết bị này đã bị tạm dừng sử dụng, vui lòng thử lại sau 30 phút hoặc liên hệ với bộ phận hỗ trợ khách hàng để gỡ bỏ\"}\n```\n\nSau khi đạt đến giới hạn, bạn có thể gọi API để gỡ bỏ giới hạn, bằng cách nhấp vào: [API gỡ bỏ giới hạn do số lượng yêu cầu in thất bại quá nhiều](https://documenter.getpostman.com/view/1758872/SWE83H6u#cf31c2a9-716f-4db0-801b-a3b816de4fb7)"
+          },
+          "response": [
+            {
+              "name": "Gửi công việc in.",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "ApiKey",
+                    "value": "",
+                    "description": "API key dành cho nhà phát triển mà bạn đã đăng ký.",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "description": "ID thiết bị",
+                      "key": "deviceId",
+                      "type": "text",
+                      "value": "wsyl-test-01"
+                    },
+                    {
+                      "description": "Khóa thiết bị",
+                      "key": "deviceKey",
+                      "type": "text",
+                      "value": "wsyl-test-01"
+                    },
+                    {
+                      "description": "Cổng thiết bị:\n1: USB1\n2: USB2\n...",
+                      "key": "devicePort",
+                      "type": "text",
+                      "value": "1"
+                    },
+                    {
+                      "description": "Mẫu máy in (tương ứng với tham số `device_name` trong giao diện danh sách máy in `printer_list`).",
+                      "key": "printerModel",
+                      "type": "text",
+                      "value": "HP LaserJet P1007"
+                    },
+                    {
+                      "description": "Tệp công việc<br/>\nHỗ trợ các loại tệp văn phòng thông dụng, tệp hình ảnh, tệp HTML, v.v.",
+                      "key": "jobFile",
+                      "type": "file",
+                      "src": "/Users/weijiangchen/Downloads/Bản sao 2(1).pdf"
+                    },
+                    {
+                      "description": "Kích thước giấy in<br/>\n9: A4<br/>\n11: A5<br/>\n- Giá trị có thể: Lấy thông số máy in: `Capabilities -> Papers`<br/>\n- Giá trị mặc định: Lấy thông số máy in: `DevMode -> PaperSize`<br/>\n\n**Lưu ý, khi sử dụng kích thước giấy tùy chỉnh, giá trị này phải được đặt thành `0`**",
+                      "key": "dmPaperSize",
+                      "type": "text",
+                      "value": "9"
+                    },
+                    {
+                      "description": "Hướng in giấy<br/>\n1: Dọc<br/>\n2: Ngang<br/>\n- Giá trị mặc định: Lấy thông số máy in: `DevMode -> Orientation`",
+                      "key": "dmOrientation",
+                      "type": "text",
+                      "value": "1"
+                    },
+                    {
+                      "description": "Số lượng bản in<br/>\n1: In một bản<br/>\n- Số lượng tối đa không được vượt quá thông số của máy in: `Capabilities -> Copies`",
+                      "key": "dmCopies",
+                      "type": "text",
+                      "value": "1"
+                    },
+                    {
+                      "description": "Nguồn giấy<br/>\n- Các giá trị có thể: Lấy thông số máy in: `Capabilities -> Bins`<br>\n- Giá trị mặc định: Lấy thông số máy in: `DevMode -> DefaultSource`",
+                      "key": "dmDefaultSource",
+                      "type": "text",
+                      "value": "1"
+                    },
+                    {
+                      "description": "In màu<br/>\n1: Đen trắng<br/>\n2: Màu<br/>\n- Giá trị mặc định: Lấy thông số máy in: `DevMode -> Color`",
+                      "key": "dmColor",
+                      "type": "text",
+                      "value": "1"
+                    },
+                    {
+                      "description": "In hai mặt<br/>\n1: Tắt<br/>\n2: Cạnh dài<br/>\n3: Cạnh ngắn<br/>\n- Giá trị mặc định: Lấy thông số máy in: `DevMode -> Duplex`",
+                      "key": "dmDuplex",
+                      "type": "text",
+                      "value": "1"
+                    },
+                    {
+                      "description": "Loại giấy in<br/>\n- Giá trị có thể: Lấy thông số máy in: `Capabilities -> MediaTypes`<br/>\n- Giá trị mặc định: Lấy thông số máy in: `DevMode -> MediaType`",
+                      "key": "dmMediaType",
+                      "type": "text",
+                      "value": "0"
+                    },
+                    {
+                      "description": "Phạm vi số trang tài liệu<br/>\nVí dụ: 1,2,3,4,5-10<br/>\n(Để trống để in tất cả các trang)",
+                      "key": "jpPageRange",
+                      "type": "text",
+                      "value": "1,2,3,4",
+                      "disabled": true
+                    },
+                    {
+                      "description": "Tự động xoay tài liệu<br/>\n0: Tắt (mặc định)<br/>\n1: Bật",
+                      "key": "jpAutoRotate",
+                      "type": "text",
+                      "value": "0"
+                    },
+                    {
+                      "description": "Tự động điều chỉnh kích thước<br/>\n4: Tự động điều chỉnh<br/>\n0: In theo kích thước gốc<br/>\n3: Kéo giãn toàn bộ hình ảnh<br/>\nxx%: Tùy chỉnh, phần trăm diện tích trên trang giấy<br/>",
+                      "key": "jpAutoScale",
+                      "type": "text",
+                      "value": "90%",
+                      "disabled": true
+                    },
+                    {
+                      "description": "Tự động căn chỉnh<br/>\n<Trống>: Góc trên bên trái (tương tự như z1, mặc định)<br/>\nz1: Góc trên bên trái<br/>\nz4: Giữa bên trái<br/>\nz7: Góc dưới bên trái<br/>\nz2: Góc trên bên phải<br/>\nz5: Giữa<br/>\nz8: Góc dưới bên phải<br/>\nz3: Góc trên bên phải<br/>\nz6: Giữa bên phải<br/>\nz9: Góc dưới bên phải<br/>",
+                      "key": "jpAutoAlign",
+                      "type": "text",
+                      "value": "z1",
+                      "disabled": true
+                    },
+                    {
+                      "key": "dmPaperLength",
+                      "value": "",
+                      "description": "Chiều cao tùy chỉnh, có hiệu lực khi dmPaperSize bằng 0, đơn vị là 0,1 mm.",
+                      "type": "text",
+                      "disabled": true
+                    },
+                    {
+                      "key": "dmPaperWidth",
+                      "value": "",
+                      "description": "Chiều rộng tùy chỉnh, có hiệu lực khi dmPaperSize bằng 0, đơn vị là 0,1 mm.",
+                      "type": "text",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "https://{{url}}/api/print/job",
+                  "protocol": "https",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "print",
+                    "job"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Server",
+                  "value": "nginx"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 05 Jan 2020 12:55:20 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "87"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Access-Control-Allow-Methods",
+                  "value": "GET, POST, OPTIONS, DELETE"
+                },
+                {
+                  "key": "Access-Control-Allow-Headers",
+                  "value": "DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Authorization,ApiKey"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"code\": 200,\n    \"msg\": \"success\",\n    \"data\": {\n        \"task_id\": \"581decf2-c6f6-4163-8646-5dcc0c3c1c05\"\n    }\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Bước 3 - Kiểm tra trạng thái in.",
+      "item": [
+        {
+          "name": "Lấy thông tin về công việc in.",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "ApiKey",
+                "value": "{{ApiKey}}",
+                "description": "API key dành cho nhà phát triển mà bạn đã đăng ký.",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/api/print/job?deviceId={{deviceId}}&deviceKey={{deviceKey}}&devicePort={{devicePort}}&task_id={{task_id}}",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "api",
+                "print",
+                "job"
+              ],
+              "query": [
+                {
+                  "key": "deviceId",
+                  "value": "{{deviceId}}"
+                },
+                {
+                  "key": "deviceKey",
+                  "value": "{{deviceKey}}"
+                },
+                {
+                  "key": "devicePort",
+                  "value": "{{devicePort}}"
+                },
+                {
+                  "key": "task_id",
+                  "value": "{{task_id}}"
+                }
+              ]
+            },
+            "description": "```json\n{\n  \"translation\": \"Trong hầu hết các trường hợp, nên sử dụng chức năng gọi lại (callback) của giao diện `POST api/print/job` thay vì giao diện này.\\n\\nKhi gửi yêu cầu in, hãy sử dụng ID nhiệm vụ (`task_id`) được trả về để truy vấn trạng thái nhiệm vụ in. Nếu là bản xem trước, giao diện sẽ trả về hình ảnh xem trước.\\n\\n_**Đề xuất khoảng thời gian kiểm tra lại là 10 giây**_\\n\\n---\\n\\nTrong kết quả trả về, `task_state` thể hiện trạng thái của hàng đợi, trong đó:\\n\\n- `READY`: Đang chờ xử lý\\n- `PARSING`: Đang phân tích\\n- `SENDING`: Đang gửi\\n- `SUCCESS`: Thành công\\n- `FAILURE`: Thất bại\\n- `SET_REVOKE`: Đã đánh dấu để hủy\\n- `REVOKED`: Hủy thành công\\n\\nKhi trạng thái hàng đợi là thành công, **giá trị trả về sẽ bao gồm** `task_result`, **thể hiện kết quả in**. Nếu mã là 200, nghĩa là in thành công; nếu không phải 200, nghĩa là in thất bại. Thông tin chi tiết xem ở `msg`.\"\n}\n```"
+          },
+          "response": [
+            {
+              "name": "Lấy thông tin về công việc in.",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "ApiKey",
+                    "value": "{{ApiKey}}",
+                    "description": "API key dành cho nhà phát triển mà bạn đã đăng ký.",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "https://{{url}}/api/print/job?deviceId={{deviceId}}&deviceKey={{deviceKey}}&devicePort={{devicePort}}&task_id={{task_id}}",
+                  "protocol": "https",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "print",
+                    "job"
+                  ],
+                  "query": [
+                    {
+                      "key": "deviceId",
+                      "value": "{{deviceId}}"
+                    },
+                    {
+                      "key": "deviceKey",
+                      "value": "{{deviceKey}}"
+                    },
+                    {
+                      "key": "devicePort",
+                      "value": "{{devicePort}}"
+                    },
+                    {
+                      "key": "task_id",
+                      "value": "{{task_id}}"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Date",
+                  "value": "Wed, 06 Dec 2023 02:06:36 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "253"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Strict-Transport-Security",
+                  "value": "max-age=15724800; includeSubDomains"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Access-Control-Allow-Credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "Access-Control-Allow-Methods",
+                  "value": "PUT, GET, POST, OPTIONS, DELETE"
+                },
+                {
+                  "key": "Access-Control-Allow-Headers",
+                  "value": "DNT,web-token,app-token,Authorization,Accept,Origin,Keep-Alive,User-Agent,X-Mx-ReqToken,X-Data-Type,X-Auth-Token,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,token,Cookie,apikey,session-id"
+                },
+                {
+                  "key": "Access-Control-Max-Age",
+                  "value": "1728000"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"code\": 200,\n    \"data\": {\n        \"task_done_time\": \"Wed, 06 Dec 2023 02:06:12 GMT\",\n        \"task_done_timestamp\": 1701828372789,\n        \"task_result\": {\n            \"code\": 200,\n            \"data\": {\n                \"file_total\": 108499,\n                \"send_total\": 108499,\n                \"total_page\": 2\n            },\n            \"msg\": \"success\"\n        },\n        \"task_state\": \"SUCCESS\"\n    },\n    \"msg\": \"success\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Khác (lấy thông tin máy chủ, hủy tác vụ, v.v.)",
+      "item": [
+        {
+          "name": "Lấy thông tin thiết bị (trạng thái trực tuyến, kiểu máy, phiên bản phần mềm, thông tin mạng).",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "ApiKey",
+                "value": "{{ApiKey}}",
+                "description": "API key dành cho nhà phát triển mà bạn đã đăng ký.",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/api/device/device_info?deviceId={{deviceId}}&deviceKey={{deviceKey}}",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "api",
+                "device",
+                "device_info"
+              ],
+              "query": [
+                {
+                  "key": "deviceId",
+                  "value": "{{deviceId}}",
+                  "description": "ID thiết bị"
+                },
+                {
+                  "key": "deviceKey",
+                  "value": "{{deviceKey}}",
+                  "description": "Khóa chia sẻ máy in."
+                }
+              ]
+            },
+            "description": "Lấy thông tin thiết bị\n\nBao gồm trạng thái trực tuyến, số lượng cổng USB, thời gian hết hạn, phiên bản phần cứng và phần mềm của thiết bị, thông tin mạng của thiết bị.\n\n#### Tham số \"online\":\n| Giá trị | Mô tả |\n|---------|---------------|\n| null | Chưa từng khởi động |\n| 1 | Trực tuyến |\n| 0 | Ngoại tuyến |"
+          },
+          "response": [
+            {
+              "name": "Lấy thông tin thiết bị (trạng thái trực tuyến, kiểu máy, phiên bản phần mềm, thông tin mạng).",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "ApiKey",
+                    "value": "{{ApiKey}}",
+                    "description": "API key dành cho nhà phát triển mà bạn đã đăng ký.",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "https://{{url}}/api/device/device_info?deviceId={{deviceId}}&deviceKey={{deviceKey}}",
+                  "protocol": "https",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "device",
+                    "device_info"
+                  ],
+                  "query": [
+                    {
+                      "key": "deviceId",
+                      "value": "{{deviceId}}",
+                      "description": "ID thiết bị"
+                    },
+                    {
+                      "key": "deviceKey",
+                      "value": "{{deviceKey}}",
+                      "description": "Khóa chia sẻ máy in."
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Date",
+                  "value": "Fri, 08 Dec 2023 03:33:08 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "532"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Strict-Transport-Security",
+                  "value": "max-age=15724800; includeSubDomains"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Access-Control-Allow-Credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "Access-Control-Allow-Methods",
+                  "value": "PUT, GET, POST, OPTIONS, DELETE"
+                },
+                {
+                  "key": "Access-Control-Allow-Headers",
+                  "value": "DNT,web-token,app-token,Authorization,Accept,Origin,Keep-Alive,User-Agent,X-Mx-ReqToken,X-Data-Type,X-Auth-Token,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,token,Cookie,apikey,session-id"
+                },
+                {
+                  "key": "Access-Control-Max-Age",
+                  "value": "1728000"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"code\": 200,\n    \"data\": {\n        \"info\": {\n            \"api_support\": 1,\n            \"device_type\": 2,\n            \"expire_date\": \"2024年8月25日\",\n            \"is_expire\": false,\n            \"mobile_support\": 1,\n            \"online\": 1,\n            \"remote_support\": 1,\n            \"usb_port_num\": 3\n        },\n        \"network\": {\n            \"lan\": {\n                \"dns\": \"\",\n                \"gateway\": \"\",\n                \"ipaddr\": \"169.254.1.188\",\n                \"link\": [\n                    false\n                ],\n                \"macaddr\": \"\",\n                \"netmask\": \"255.255.0.0\",\n                \"proto\": \"dhcp\"\n            },\n            \"wwan\": {\n                \"dns\": [\n                    \"192.168.5.29\"\n                ],\n                \"gateway\": \"192.168.5.29\",\n                \"ipaddr\": \"192.168.7.156\",\n                \"macaddr\": \"\",\n                \"netmask\": \"255.255.252.0\",\n                \"proto\": \"dhcp\"\n            }\n        },\n        \"version\": {\n            \"hardware\": \"LK300EW_D2\",\n            \"software\": \"2.1.113\"\n        }\n    },\n    \"msg\": \"success\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Hủy tác vụ in.",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "ApiKey",
+                "value": "{{ApiKey}}",
+                "description": "API key dành cho nhà phát triển mà bạn đã đăng ký.",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/api/print/job?deviceId={{deviceId}}&deviceKey={{deviceKey}}&devicePort={{devicePort}}&task_id={{task_id}}",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "api",
+                "print",
+                "job"
+              ],
+              "query": [
+                {
+                  "key": "deviceId",
+                  "value": "{{deviceId}}",
+                  "description": "ID thiết bị"
+                },
+                {
+                  "key": "deviceKey",
+                  "value": "{{deviceKey}}",
+                  "description": "Khóa thiết bị"
+                },
+                {
+                  "key": "devicePort",
+                  "value": "{{devicePort}}",
+                  "description": "Cổng thiết bị<br/>\n1: USB1<br/>\n2: USB2<br/>\n…"
+                },
+                {
+                  "key": "task_id",
+                  "value": "{{task_id}}",
+                  "description": "ID nhiệm vụ"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Đã hủy thành công tác vụ in.",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "https://v2.api.dyfwq.cn/printer/job?deviceId=e4681c61d71c1b39&deviceKey=cwIgETNP9HYGt8SY&devicePort=1&jobId=1",
+                  "protocol": "https",
+                  "host": [
+                    "v2",
+                    "api",
+                    "dyfwq",
+                    "cn"
+                  ],
+                  "path": [
+                    "printer",
+                    "job"
+                  ],
+                  "query": [
+                    {
+                      "key": "deviceId",
+                      "value": "e4681c61d71c1b39",
+                      "description": "ID thiết bị"
+                    },
+                    {
+                      "key": "deviceKey",
+                      "value": "cwIgETNP9HYGt8SY",
+                      "description": "Khóa bảo mật thiết bị"
+                    },
+                    {
+                      "key": "devicePort",
+                      "value": "1",
+                      "description": "Cổng thiết bị<br/>\n1: USB1<br/>\n2: USB2<br/>\n…"
+                    },
+                    {
+                      "key": "jobId",
+                      "value": "1",
+                      "description": "ID nhiệm vụ"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=UTF-8"
+                },
+                {
+                  "key": "Date",
+                  "value": "Wed, 19 Jun 2019 06:20:36 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "38"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"code\": 200,\n    \"msg\": \"success\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Lấy danh sách các kiểu máy in được hỗ trợ.",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "ApiKey",
+                "value": "{{ApiKey}}",
+                "description": "API key dành cho nhà phát triển mà bạn đã đăng ký.",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/api/print/printer_enum",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "api",
+                "print",
+                "printer_enum"
+              ]
+            },
+            "description": "Lấy danh sách tất cả các kiểu máy in được hỗ trợ cho máy in trên máy chủ đám mây.<br>\n_(Nếu kiểu máy in của bạn không có trong danh sách, vui lòng phản hồi cho chúng tôi và chúng tôi sẽ cập nhật trong thời gian sớm nhất)_"
+          },
+          "response": [
+            {
+              "name": "Lấy danh sách các kiểu máy in được hỗ trợ cho máy chủ đám mây.",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "https://v2.api.dyfwq.cn/printer/enum",
+                  "protocol": "https",
+                  "host": [
+                    "v2",
+                    "api",
+                    "dyfwq",
+                    "cn"
+                  ],
+                  "path": [
+                    "printer",
+                    "enum"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=UTF-8"
+                },
+                {
+                  "key": "Date",
+                  "value": "Wed, 19 Jun 2019 05:59:46 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "721"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"code\": 200,\n    \"data\": [\n        \"DASCOM DS-660\",\n        \"XP-80\",\n        \"QR-588 LABEL\",\n        \"Microsoft XPS Document Writer\",\n        \"KM-300S\",\n        \"KM-300BU\",\n        \"KM-218PRE\",\n        \"KM-218BT\",\n        \"KM-218\",\n        \"KM-200SP\",\n        \"KM-200\",\n        \"KM-118S\",\n        \"KM-118HD\",\n        \"KM-118C\",\n        \"KM-118BT\",\n        \"KM-118\",\n        \"KM-1100\",\n        \"KM-108\",\n        \"KM-100S\",\n        \"KM-100HD\",\n        \"KM-100\",\n        \"HP LaserJet P1007\",\n        \"EPSON L310 Series\",\n        \"Deli DL-735K\",\n        \"Deli DL-730K\",\n        \"Deli DL-690K\",\n        \"Deli DL-635K\",\n        \"Deli DL-630K\",\n        \"Deli DL-590K\",\n        \"Deli DE-730K\",\n        \"Deli DE-690K\",\n        \"Deli DE-630K\",\n        \"Deli DE-590K\",\n        \"Canon MP280 series Printer\",\n        \"Brother MFC-7880DN Printer\"\n    ],\n    \"msg\": \"success\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Tìm kiếm các kiểu máy in được hỗ trợ.",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "description": "API key dành cho nhà phát triển mà bạn đã đăng ký.",
+                "key": "ApiKey",
+                "type": "text",
+                "value": "{{ApiKey}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"query\": \"HP 1020\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/api/print/printer_enum",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "api",
+                "print",
+                "printer_enum"
+              ]
+            },
+            "description": "Hỗ trợ tìm kiếm mờ dựa trên các kiểu máy in từ danh sách `printer_enum`."
+          },
+          "response": [
+            {
+              "name": "Tìm kiếm các kiểu máy in được hỗ trợ thành công.",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "description": "API key dành cho nhà phát triển mà bạn đã đăng ký.",
+                    "key": "ApiKey",
+                    "type": "text",
+                    "value": "{{ApiKey}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"query\": \"HP 1020\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "https://{{url}}/api/print/printer_enum",
+                  "protocol": "https",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "print",
+                    "printer_enum"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Server",
+                  "value": "nginx"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 27 Sep 2020 02:29:01 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "266"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Access-Control-Allow-Methods",
+                  "value": "GET, POST, OPTIONS, DELETE"
+                },
+                {
+                  "key": "Access-Control-Allow-Headers",
+                  "value": "DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Authorization,ApiKey"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"code\": 200,\n    \"msg\": \"success\",\n    \"data\": [\n        \"HP LaserJet 1020\",\n        \"HP Laser NS 1020 PCLmS\",\n        \"HP LaserJet Professional CP1020 Series\",\n        \"Canon iR1020/1024/1025 UFRII LT\",\n        \"JIAPUWEI JPW1020\",\n        \"Kyocera Mita FS-1020D KX\",\n        \"Biaotop TP-1020\",\n        \"TEJIEYIDE TJYD1020\",\n        \"Kyocera FS-1020MFP GX\"\n    ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Truy vấn thông tin về các công việc in của một thiết bị cụ thể trong vòng một ngày.",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "name": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "ApiKey",
+                "value": "{{ApiKey}}",
+                "description": "API key dành cho nhà phát triển mà bạn đã đăng ký.",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"deviceId\": \"{{deviceId}}\",\n\t\"deviceKey\": \"{{deviceKey}}\"\n}"
+            },
+            "url": {
+              "raw": "{{url}}/api/print/query_device_task",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "api",
+                "print",
+                "query_device_task"
+              ]
+            },
+            "description": "Truy vấn thông tin về các công việc in của một thiết bị cụ thể trong vòng một ngày."
+          },
+          "response": [
+            {
+              "name": "Lấy thông tin về tất cả các công việc in của thiết bị.",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "name": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "ApiKey",
+                    "value": "{{ApiKey}}",
+                    "description": "API key dành cho nhà phát triển mà bạn đã đăng ký.",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n\t\"deviceId\": \"{{deviceId}}\",\n\t\"deviceKey\": \"{{deviceKey}}\"\n}"
+                },
+                "url": {
+                  "raw": "https://{{url}}/api/print/query_device_task",
+                  "protocol": "https",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "print",
+                    "query_device_task"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Server",
+                  "value": "nginx"
+                },
+                {
+                  "key": "Date",
+                  "value": "Wed, 02 Sep 2020 03:35:45 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "8317"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Access-Control-Allow-Methods",
+                  "value": "GET, POST, OPTIONS, DELETE"
+                },
+                {
+                  "key": "Access-Control-Allow-Headers",
+                  "value": "DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Authorization,ApiKey"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"code\": 200,\n    \"msg\": \"success\",\n    \"data\": {\n        \"task_list\": [\n            {\n                \"task_id\": \"0241a927-a218-4ff6-894d-8fe427da794c\",\n                \"result\": {\n                    \"code\": 200,\n                    \"msg\": \"success\"\n                },\n                \"job_id\": \"\",\n                \"job_status\": 1,\n                \"status\": \"SUCCESS\",\n                \"create_at\": \"2020-09-02 11:02:36\",\n                \"updated_at\": \"2020-09-02 11:02:39\"\n            },\n            {\n                \"task_id\": \"69599185-cb22-4a11-8af0-65756911f5d8\",\n                \"result\": {\n                    \"code\": 200,\n                    \"msg\": \"success\"\n                },\n                \"job_id\": \"\",\n                \"job_status\": 1,\n                \"status\": \"SUCCESS\",\n                \"create_at\": \"2020-09-02 11:00:33\",\n                \"updated_at\": \"2020-09-02 11:00:38\"\n            },\n            {\n                \"task_id\": \"91d6d3d4-8281-4d12-b37c-5b949ea8dd70\",\n                \"result\": {\n                    \"code\": 200,\n                    \"msg\": \"success\"\n                },\n                \"job_id\": \"\",\n                \"job_status\": 1,\n                \"status\": \"SUCCESS\",\n                \"create_at\": \"2020-09-02 10:55:32\",\n                \"updated_at\": \"2020-09-02 10:55:39\"\n            },\n            {\n                \"task_id\": \"b98a3a4d-efe9-4195-a105-64617edd4036\",\n                \"result\": {\n                    \"code\": 500,\n                    \"msg\": \"设备连接异常，请检查设备网络: 错误详情：server id not found\"\n                },\n                \"job_id\": \"\",\n                \"job_status\": 0,\n                \"status\": \"SUCCESS\",\n                \"create_at\": \"2020-09-02 10:54:41\",\n                \"updated_at\": \"2020-09-02 10:55:26\"\n            },\n            {\n                \"task_id\": \"91f501f8-68b7-4645-ad61-d276afa51a9f\",\n                \"result\": {\n                    \"code\": 200,\n                    \"msg\": \"success\"\n                },\n                \"job_id\": \"\",\n                \"job_status\": 1,\n                \"status\": \"SUCCESS\",\n                \"create_at\": \"2020-09-02 10:52:38\",\n                \"updated_at\": \"2020-09-02 10:52:45\"\n            },\n            {\n                \"task_id\": \"91df13b5-cc8e-4eb5-b1c9-cd7069fae7e7\",\n                \"result\": {\n                    \"code\": 200,\n                    \"msg\": \"success\"\n                },\n                \"job_id\": \"\",\n                \"job_status\": 1,\n                \"status\": \"SUCCESS\",\n                \"create_at\": \"2020-09-02 10:52:30\",\n                \"updated_at\": \"2020-09-02 10:52:35\"\n            },\n            {\n                \"task_id\": \"8dbc4f98-0165-4809-b5b5-c81db3a5a784\",\n                \"result\": {\n                    \"code\": 200,\n                    \"msg\": \"success\"\n                },\n                \"job_id\": \"\",\n                \"job_status\": 1,\n                \"status\": \"SUCCESS\",\n                \"create_at\": \"2020-09-02 10:42:09\",\n                \"updated_at\": \"2020-09-02 10:45:32\"\n            },\n            {\n                \"task_id\": \"76a1e3af-5daa-4507-8ebc-99c3cb4ad096\",\n                \"result\": {\n                    \"code\": 200,\n                    \"msg\": \"success\"\n                },\n                \"job_id\": \"\",\n                \"job_status\": 1,\n                \"status\": \"SUCCESS\",\n                \"create_at\": \"2020-09-01 21:48:06\",\n                \"updated_at\": \"2020-09-01 21:48:11\"\n            },\n            {\n                \"task_id\": \"d1202e2e-17ba-41e7-b5c6-00083916b4b8\",\n                \"result\": {\n                    \"code\": 200,\n                    \"msg\": \"success\"\n                },\n                \"job_id\": \"\",\n                \"job_status\": 1,\n                \"status\": \"SUCCESS\",\n                \"create_at\": \"2020-09-01 21:47:41\",\n                \"updated_at\": \"2020-09-01 21:47:45\"\n            },\n            {\n                \"task_id\": \"b35dc664-b6ad-47f2-b56e-61f7918c6eb4\",\n                \"result\": {\n                    \"code\": 200,\n                    \"msg\": \"success\"\n                },\n                \"job_id\": \"\",\n                \"job_status\": 1,\n                \"status\": \"SUCCESS\",\n                \"create_at\": \"2020-09-01 21:47:29\",\n                \"updated_at\": \"2020-09-01 21:47:33\"\n            },\n            {\n                \"task_id\": \"d910af11-f161-40cf-b5bd-2c91e75a10b9\",\n                \"result\": {\n                    \"code\": 200,\n                    \"msg\": \"success\"\n                },\n                \"job_id\": \"\",\n                \"job_status\": 1,\n                \"status\": \"SUCCESS\",\n                \"create_at\": \"2020-09-01 21:47:20\",\n                \"updated_at\": \"2020-09-01 21:47:24\"\n            },\n            {\n                \"task_id\": \"1dc3638e-18d9-4c77-ba8b-bf38e5c5329d\",\n                \"result\": {\n                    \"code\": 200,\n                    \"msg\": \"success\"\n                },\n                \"job_id\": \"\",\n                \"job_status\": 1,\n                \"status\": \"SUCCESS\",\n                \"create_at\": \"2020-09-01 21:47:08\",\n                \"updated_at\": \"2020-09-01 21:47:13\"\n            },\n            {\n                \"task_id\": \"87df59f8-d617-4307-8a08-4bc8b08388ac\",\n                \"result\": {\n                    \"code\": 200,\n                    \"msg\": \"success\"\n                },\n                \"job_id\": \"\",\n                \"job_status\": 1,\n                \"status\": \"SUCCESS\",\n                \"create_at\": \"2020-09-01 21:46:22\",\n                \"updated_at\": \"2020-09-01 21:46:26\"\n            },\n            {\n                \"task_id\": \"dd998193-f7af-4b85-8075-45a1305dadf6\",\n                \"result\": {\n                    \"code\": 200,\n                    \"msg\": \"success\"\n                },\n                \"job_id\": \"\",\n                \"job_status\": 1,\n                \"status\": \"SUCCESS\",\n                \"create_at\": \"2020-09-01 21:44:34\",\n                \"updated_at\": \"2020-09-01 21:44:38\"\n            },\n            {\n                \"task_id\": \"fa166254-d302-48d7-9e84-5311fe41c6ac\",\n                \"result\": {\n                    \"code\": 200,\n                    \"msg\": \"success\"\n                },\n                \"job_id\": \"\",\n                \"job_status\": 1,\n                \"status\": \"SUCCESS\",\n                \"create_at\": \"2020-09-01 18:08:51\",\n                \"updated_at\": \"2020-09-01 18:08:56\"\n            },\n            {\n                \"task_id\": \"8524ddea-16ca-4e8e-8fbe-3ba354a63058\",\n                \"result\": {\n                    \"code\": 200,\n                    \"msg\": \"success\"\n                },\n                \"job_id\": \"\",\n                \"job_status\": 1,\n                \"status\": \"SUCCESS\",\n                \"create_at\": \"2020-09-01 18:08:41\",\n                \"updated_at\": \"2020-09-01 18:08:46\"\n            },\n            {\n                \"task_id\": \"e3047717-475a-45c8-903a-640c84ef3ae2\",\n                \"result\": {\n                    \"code\": 200,\n                    \"msg\": \"success\"\n                },\n                \"job_id\": \"\",\n                \"job_status\": 1,\n                \"status\": \"SUCCESS\",\n                \"create_at\": \"2020-09-01 18:07:29\",\n                \"updated_at\": \"2020-09-01 18:07:37\"\n            },\n            {\n                \"task_id\": \"b20839b8-8cc5-4d9c-9753-ce1543d43f25\",\n                \"result\": {\n                    \"code\": 200,\n                    \"msg\": \"success\"\n                },\n                \"job_id\": \"\",\n                \"job_status\": 1,\n                \"status\": \"SUCCESS\",\n                \"create_at\": \"2020-09-01 18:05:57\",\n                \"updated_at\": \"2020-09-01 18:06:01\"\n            },\n            {\n                \"task_id\": \"91289972-b04c-4892-b25e-e38afe14a51f\",\n                \"result\": {\n                    \"code\": 200,\n                    \"msg\": \"success\"\n                },\n                \"job_id\": \"\",\n                \"job_status\": 1,\n                \"status\": \"SUCCESS\",\n                \"create_at\": \"2020-09-01 18:05:37\",\n                \"updated_at\": \"2020-09-01 18:05:41\"\n            },\n            {\n                \"task_id\": \"7adbc4c1-c007-4312-81c4-fc3bb9bd01da\",\n                \"result\": {\n                    \"code\": 200,\n                    \"msg\": \"success\"\n                },\n                \"job_id\": \"\",\n                \"job_status\": 1,\n                \"status\": \"SUCCESS\",\n                \"create_at\": \"2020-09-01 18:05:22\",\n                \"updated_at\": \"2020-09-01 18:05:28\"\n            },\n            {\n                \"task_id\": \"686a947b-e4e2-4178-8315-543dea680b93\",\n                \"result\": {\n                    \"code\": 200,\n                    \"msg\": \"success\"\n                },\n                \"job_id\": \"\",\n                \"job_status\": 1,\n                \"status\": \"SUCCESS\",\n                \"create_at\": \"2020-09-01 18:05:11\",\n                \"updated_at\": \"2020-09-01 18:05:16\"\n            },\n            {\n                \"task_id\": \"48a4469b-3b40-47dd-ab2d-52d991651661\",\n                \"result\": {\n                    \"code\": 200,\n                    \"msg\": \"success\"\n                },\n                \"job_id\": \"\",\n                \"job_status\": 1,\n                \"status\": \"SUCCESS\",\n                \"create_at\": \"2020-09-01 17:32:18\",\n                \"updated_at\": \"2020-09-01 17:32:39\"\n            },\n            {\n                \"task_id\": \"a0214c1b-a9da-4fd7-bde8-8871195623ea\",\n                \"result\": {\n                    \"code\": 502,\n                    \"msg\": \"转换文件格式失败: 无法旋转文件方向，请检查纸张横竖向是否设置错误\"\n                },\n                \"job_id\": \"\",\n                \"job_status\": 0,\n                \"status\": \"SUCCESS\",\n                \"create_at\": \"2020-09-01 17:30:18\",\n                \"updated_at\": \"2020-09-01 17:30:36\"\n            },\n            {\n                \"task_id\": \"2e60ff43-7ec0-4f18-96e9-e85cd5cfcc30\",\n                \"result\": {\n                    \"code\": 200,\n                    \"msg\": \"success\"\n                },\n                \"job_id\": \"\",\n                \"job_status\": 1,\n                \"status\": \"SUCCESS\",\n                \"create_at\": \"2020-09-01 17:30:02\",\n                \"updated_at\": \"2020-09-01 17:30:12\"\n            },\n            {\n                \"task_id\": \"d2ed94eb-240a-4071-bef7-3df1f76fc480\",\n                \"result\": {\n                    \"code\": 200,\n                    \"msg\": \"success\"\n                },\n                \"job_id\": \"\",\n                \"job_status\": 1,\n                \"status\": \"SUCCESS\",\n                \"create_at\": \"2020-09-01 17:29:22\",\n                \"updated_at\": \"2020-09-01 17:29:32\"\n            },\n            {\n                \"task_id\": \"7b47f626-af74-4f3f-9677-c04e75ebc781\",\n                \"result\": {\n                    \"code\": 200,\n                    \"msg\": \"success\"\n                },\n                \"job_id\": \"\",\n                \"job_status\": 1,\n                \"status\": \"SUCCESS\",\n                \"create_at\": \"2020-09-01 17:28:46\",\n                \"updated_at\": \"2020-09-01 17:28:54\"\n            },\n            {\n                \"task_id\": \"0e7991cb-5999-41b2-b79a-91425c4170e7\",\n                \"result\": {\n                    \"code\": 200,\n                    \"msg\": \"success\"\n                },\n                \"job_id\": \"\",\n                \"job_status\": 1,\n                \"status\": \"SUCCESS\",\n                \"create_at\": \"2020-09-01 17:28:03\",\n                \"updated_at\": \"2020-09-01 17:28:19\"\n            },\n            {\n                \"task_id\": \"2bbfe936-79f8-4abd-9f4b-121fd8c4e7f3\",\n                \"result\": {\n                    \"code\": 200,\n                    \"msg\": \"success\"\n                },\n                \"job_id\": \"\",\n                \"job_status\": 1,\n                \"status\": \"SUCCESS\",\n                \"create_at\": \"2020-09-01 17:27:19\",\n                \"updated_at\": \"2020-09-01 17:27:31\"\n            },\n            {\n                \"task_id\": \"19c7824e-f442-410f-90f8-7e8da73ea611\",\n                \"result\": {\n                    \"code\": 200,\n                    \"msg\": \"success\"\n                },\n                \"job_id\": \"\",\n                \"job_status\": 1,\n                \"status\": \"SUCCESS\",\n                \"create_at\": \"2020-09-01 17:26:39\",\n                \"updated_at\": \"2020-09-01 17:26:55\"\n            },\n            {\n                \"task_id\": \"964017df-11b6-4a84-b40d-0f44fc5407b6\",\n                \"result\": {\n                    \"code\": 200,\n                    \"msg\": \"success\"\n                },\n                \"job_id\": \"\",\n                \"job_status\": 1,\n                \"status\": \"SUCCESS\",\n                \"create_at\": \"2020-09-01 17:26:18\",\n                \"updated_at\": \"2020-09-01 17:26:32\"\n            },\n            {\n                \"task_id\": \"31fc44d2-5ad0-4563-80bf-34159f29f541\",\n                \"result\": {\n                    \"code\": 200,\n                    \"msg\": \"success\"\n                },\n                \"job_id\": \"\",\n                \"job_status\": 1,\n                \"status\": \"SUCCESS\",\n                \"create_at\": \"2020-09-01 17:25:41\",\n                \"updated_at\": \"2020-09-01 17:25:51\"\n            },\n            {\n                \"task_id\": \"eea34278-2a00-4c5f-b917-ccf13c3c2321\",\n                \"result\": {\n                    \"code\": 200,\n                    \"msg\": \"success\"\n                },\n                \"job_id\": \"\",\n                \"job_status\": 1,\n                \"status\": \"SUCCESS\",\n                \"create_at\": \"2020-09-01 17:24:24\",\n                \"updated_at\": \"2020-09-01 17:24:40\"\n            },\n            {\n                \"task_id\": \"754403c5-ae33-4310-a04a-f77fd8444f4c\",\n                \"result\": {\n                    \"code\": 200,\n                    \"msg\": \"success\"\n                },\n                \"job_id\": \"\",\n                \"job_status\": 1,\n                \"status\": \"SUCCESS\",\n                \"create_at\": \"2020-09-01 17:23:00\",\n                \"updated_at\": \"2020-09-01 17:23:10\"\n            },\n            {\n                \"task_id\": \"4375eb0d-57a9-4abb-a0c8-bed4f23ea346\",\n                \"result\": {\n                    \"code\": 200,\n                    \"msg\": \"success\"\n                },\n                \"job_id\": \"\",\n                \"job_status\": 1,\n                \"status\": \"SUCCESS\",\n                \"create_at\": \"2020-09-01 17:22:45\",\n                \"updated_at\": \"2020-09-01 17:22:57\"\n            },\n            {\n                \"task_id\": \"5362b09a-ffcc-484d-b8d3-db62e6774f48\",\n                \"result\": {\n                    \"code\": 200,\n                    \"msg\": \"success\"\n                },\n                \"job_id\": \"\",\n                \"job_status\": 1,\n                \"status\": \"SUCCESS\",\n                \"create_at\": \"2020-09-01 17:20:09\",\n                \"updated_at\": \"2020-09-01 17:20:28\"\n            },\n            {\n                \"task_id\": \"a914ac53-6f20-42b9-b559-da691fc2ee05\",\n                \"result\": {\n                    \"code\": 200,\n                    \"msg\": \"success\"\n                },\n                \"job_id\": \"\",\n                \"job_status\": 1,\n                \"status\": \"SUCCESS\",\n                \"create_at\": \"2020-09-01 17:17:48\",\n                \"updated_at\": \"2020-09-01 17:17:56\"\n            },\n            {\n                \"task_id\": \"38c6d0d2-c6fd-4e1f-b715-79cf00fae765\",\n                \"result\": {\n                    \"code\": 200,\n                    \"msg\": \"success\"\n                },\n                \"job_id\": \"\",\n                \"job_status\": 1,\n                \"status\": \"SUCCESS\",\n                \"create_at\": \"2020-09-01 17:12:49\",\n                \"updated_at\": \"2020-09-01 17:13:08\"\n            },\n            {\n                \"task_id\": \"f25d3dd4-1351-4ade-be41-b27a271d2206\",\n                \"result\": {\n                    \"code\": 200,\n                    \"msg\": \"success\"\n                },\n                \"job_id\": \"\",\n                \"job_status\": 1,\n                \"status\": \"SUCCESS\",\n                \"create_at\": \"2020-09-01 17:12:10\",\n                \"updated_at\": \"2020-09-01 17:12:27\"\n            },\n            {\n                \"task_id\": \"f808e90d-785c-472e-b227-95da770dddd0\",\n                \"result\": {\n                    \"code\": 200,\n                    \"msg\": \"success\"\n                },\n                \"job_id\": \"\",\n                \"job_status\": 1,\n                \"status\": \"SUCCESS\",\n                \"create_at\": \"2020-09-01 16:21:22\",\n                \"updated_at\": \"2020-09-01 16:21:30\"\n            }\n        ]\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Gửi yêu cầu cấp bộ điều hợp máy in chưa được nhận dạng.",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "name": "Content-Type",
+                "type": "text",
+                "value": "application/json"
+              },
+              {
+                "description": "API key dành cho nhà phát triển mà bạn đã đăng ký.",
+                "key": "ApiKey",
+                "type": "text",
+                "value": "{{ApiKey}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"deviceId\": \"{{deviceId}}\",\n\t\"deviceKey\": \"{{deviceKey}}\",\n\t\"printerId\": \"1\",\n\t\"phone\": \"13512345678\"\n}"
+            },
+            "url": {
+              "raw": "{{url}}/api/driver/uninstall_driver_event",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "api",
+                "driver",
+                "uninstall_driver_event"
+              ]
+            },
+            "description": "Chỉ dùng để thông báo về việc điều chỉnh cho các dòng máy chưa được hỗ trợ. Sau khi gửi yêu cầu điều chỉnh, chúng tôi sẽ thực hiện điều chỉnh trong vòng 72 giờ. Thông báo hoàn tất điều chỉnh sẽ được gửi đến số điện thoại đã cung cấp.\n\n- \"printerId\": `ID tương ứng trong danh sách printer_list`\n- \"phone\": `Số điện thoại để nhận thông báo khi cài đặt thành công`"
+          },
+          "response": [
+            {
+              "name": "Trả về khi số điện thoại không hợp lệ.",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "name": "Content-Type",
+                    "type": "text",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "API key dành cho nhà phát triển mà bạn đã đăng ký.",
+                    "key": "ApiKey",
+                    "type": "text",
+                    "value": ""
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n\t\"deviceId\": \"wsyl-test-06\",\n\t\"deviceKey\": \"wsyl-test-06\",\n\t\"printerId\": \"1\",\n\t\"phone\": \"112312\"\n}"
+                },
+                "url": {
+                  "raw": "https://{{url}}/api/driver/uninstall_driver_event",
+                  "protocol": "https",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "driver",
+                    "uninstall_driver_event"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Server",
+                  "value": "nginx"
+                },
+                {
+                  "key": "Date",
+                  "value": "Fri, 27 Dec 2019 06:53:42 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "52"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Access-Control-Allow-Methods",
+                  "value": "GET, POST, OPTIONS, DELETE"
+                },
+                {
+                  "key": "Access-Control-Allow-Headers",
+                  "value": "DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Authorization,ApiKey"
+                }
+              ],
+              "cookie": [],
+              "body": "```json\n{\n    \"code\": 403,\n    \"msg\": \"Số điện thoại không hợp lệ\"\n}\n```"
+            },
+            {
+              "name": "Gửi thành công.",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "name": "Content-Type",
+                    "type": "text",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "API key dành cho nhà phát triển mà bạn đã đăng ký.",
+                    "key": "ApiKey",
+                    "type": "text",
+                    "value": ""
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n\t\"deviceId\": \"wsyl-test-06\",\n\t\"deviceKey\": \"wsyl-test-06\",\n\t\"printerId\": \"1\",\n\t\"phone\": \"13512345678\"\n}"
+                },
+                "url": {
+                  "raw": "https://{{url}}/api/driver/uninstall_driver_event",
+                  "protocol": "https",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "driver",
+                    "uninstall_driver_event"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Server",
+                  "value": "nginx"
+                },
+                {
+                  "key": "Date",
+                  "value": "Fri, 27 Dec 2019 06:54:19 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "29"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Access-Control-Allow-Methods",
+                  "value": "GET, POST, OPTIONS, DELETE"
+                },
+                {
+                  "key": "Access-Control-Allow-Headers",
+                  "value": "DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Authorization,ApiKey"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"code\": 200,\n    \"msg\": \"success\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Làm mới thông tin thiết bị theo thời gian thực.",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "ApiKey",
+                "value": "{{ApiKey}}",
+                "description": "API key dành cho nhà phát triển mà bạn đã đăng ký.",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/api/device/async_refresh_device_info?deviceId={{deviceId}}&deviceKey={{deviceKey}}",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "api",
+                "device",
+                "async_refresh_device_info"
+              ],
+              "query": [
+                {
+                  "key": "deviceId",
+                  "value": "{{deviceId}}"
+                },
+                {
+                  "key": "deviceKey",
+                  "value": "{{deviceKey}}"
+                }
+              ]
+            },
+            "description": "**Khi phiên bản phần mềm là 2.1.112 trở lên, thao tác làm mới sẽ do Linker xử lý nội bộ, không cần gọi giao diện này.**\n\nGiao diện này dùng để làm mới trạng thái trực tuyến của máy chủ in. Sau khi gọi giao diện này, hệ thống sẽ trả về kết quả ngay lập tức, và thao tác làm mới sẽ được thực hiện trong hàng đợi nền. Giao diện này tương tự như giao diện đồng bộ, đồng bộ thông tin thiết bị giữa máy chủ và máy chủ in, cũng như thông tin thời gian thực của cổng USB, để đảm bảo máy in không gặp phải tình trạng hiển thị ký tự lạ.\n\n_**Thay vì sử dụng giao diện này để kiểm tra trạng thái trực tuyến, hãy sử dụng giao diện**_[*device_info*](https://documenter.getpostman.com/view/1758872/SWE83H6u#5c1d412a-d0db-4a88-8cdb-7891fea21cc2)_**hoặc kích hoạt tùy chọn `reportDeviceStatus` trong `add_job`.**_\n\nTrong kết quả trả về, `code` đại diện cho trạng thái của thiết bị, trong đó:\n\n- `200`: Yêu cầu thành công\n- `401`: Đang thực hiện làm mới\n- `404`: ID hoặc mật khẩu thiết bị không chính xác\n- `10009`: Yêu cầu quá thường xuyên, chỉ cho phép gọi một lần cho mỗi thiết bị."
+          },
+          "response": [
+            {
+              "name": "Làm mới thông tin thiết bị theo thời gian thực.",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "ApiKey",
+                    "value": "{{ApiKey}}",
+                    "description": "API key dành cho nhà phát triển mà bạn đã đăng ký.",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "https://{{url}}/api/device/async_refresh_device_info?deviceId={{deviceId}}&deviceKey={{deviceKey}}",
+                  "protocol": "https",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "device",
+                    "async_refresh_device_info"
+                  ],
+                  "query": [
+                    {
+                      "key": "deviceId",
+                      "value": "{{deviceId}}"
+                    },
+                    {
+                      "key": "deviceKey",
+                      "value": "{{deviceKey}}"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Server",
+                  "value": "nginx"
+                },
+                {
+                  "key": "Date",
+                  "value": "Fri, 06 Aug 2021 02:15:20 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "29"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Access-Control-Allow-Methods",
+                  "value": "GET, POST, OPTIONS, DELETE"
+                },
+                {
+                  "key": "Access-Control-Allow-Headers",
+                  "value": "DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Authorization,ApiKey,SESSION-ID"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"code\": 200,\n    \"msg\": \"success\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Nhận thông tin trạng thái máy in theo thời gian thực.",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "ApiKey",
+                "value": "{{ApiKey}}",
+                "description": "API key dành cho nhà phát triển mà bạn đã đăng ký.",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/api/device/printer_status?deviceId={{deviceId}}&deviceKey={{deviceKey}}&usbPort={{devicePort}}",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "api",
+                "device",
+                "printer_status"
+              ],
+              "query": [
+                {
+                  "key": "deviceId",
+                  "value": "{{deviceId}}"
+                },
+                {
+                  "key": "deviceKey",
+                  "value": "{{deviceKey}}"
+                },
+                {
+                  "key": "usbPort",
+                  "value": "{{devicePort}}"
+                }
+              ]
+            },
+            "description": "Làm mới thông tin trạng thái in, chẳng hạn như nắp mở, hết giấy, hết băng mực, v.v.\n\nLưu ý:\n\n1. Hiện tại chỉ hỗ trợ một số loại máy in nhất định. Trước khi sử dụng giao diện này, vui lòng đảm bảo rằng trường `support_status` trả về trong danh sách máy in là `true`.\n\n2. **Chức năng này đồng bộ dữ liệu máy in theo thời gian thực. Thời gian trả về của giao diện có thể chậm hơn (các yếu tố ảnh hưởng bao gồm trạng thái mạng của khách hàng và tốc độ phản hồi của máy in). Vui lòng chỉ gọi khi cần thiết. Giao diện này giới hạn số lượng yêu cầu đồng thời từ cùng một thiết bị là 1. Nếu thiết bị gửi nhiều yêu cầu đến cùng một cổng USB trong một khoảng thời gian ngắn, hệ thống sẽ trả về thông báo \"yêu cầu quá tải\".**\n\n3. Nên sử dụng chức năng này với phiên bản phần mềm cố định cao hơn 2.1.60.\n\nKết quả trả về:\n\n- `headOpened`: Nắp đã mở.\n- `paperJam`: Kẹt giấy.\n- `outOfPaper`: Hết giấy.\n- `outOfRibbon`: Hết băng mực (chỉ áp dụng cho các loại máy in nhãn có chức năng sử dụng băng mực).\n- `outOfInk`: Mực/bột in thấp (chỉ áp dụng cho một số loại máy in laser và máy in phun).\n- `pause`: Máy in đang tạm dừng.\n- `printing`: Đang in.\n- `msg`: Thông báo.\n\nMột số loại máy có thể trả về các trường sau:\n\n- `statusCode`: Mã trạng thái.\n- `errCode`: Mã lỗi."
+          },
+          "response": [
+            {
+              "name": "Ví dụ về trường hợp thiếu giấy.",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "ApiKey",
+                    "value": "{{ApiKey}}",
+                    "description": "API key dành cho nhà phát triển mà bạn đã đăng ký.",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "http://{{url}}/api/device/printer_status?deviceId={{deviceId}}&deviceKey={{deviceKey}}&usbPort=1",
+                  "protocol": "http",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "device",
+                    "printer_status"
+                  ],
+                  "query": [
+                    {
+                      "key": "deviceId",
+                      "value": "{{deviceId}}"
+                    },
+                    {
+                      "key": "deviceKey",
+                      "value": "{{deviceKey}}"
+                    },
+                    {
+                      "key": "printerModel",
+                      "value": "{{printerModel}}",
+                      "disabled": true
+                    },
+                    {
+                      "key": "usbPort",
+                      "value": "1"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Date",
+                  "value": "Tue, 05 Dec 2023 03:44:40 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "202"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"code\": 200,\n    \"data\": {\n        \"errCode\": null,\n        \"headOpened\": false,\n        \"msg\": \"Cannot feed paper.\",\n        \"outOfInk\": false,\n        \"outOfPaper\": true,\n        \"paperJam\": false,\n        \"pause\": true,\n        \"printing\": false,\n        \"statusCode\": \"41208\"\n    },\n    \"msg\": \"success\"\n}"
+            },
+            {
+              "name": "Ví dụ về việc không cài đặt máy in.",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "ApiKey",
+                    "value": "{{ApiKey}}",
+                    "description": "API key dành cho nhà phát triển mà bạn đã đăng ký.",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "http://{{url}}/api/device/printer_status?deviceId={{deviceId}}&deviceKey={{deviceKey}}&usbPort={{devicePort}}",
+                  "protocol": "http",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "device",
+                    "printer_status"
+                  ],
+                  "query": [
+                    {
+                      "key": "deviceId",
+                      "value": "{{deviceId}}"
+                    },
+                    {
+                      "key": "deviceKey",
+                      "value": "{{deviceKey}}"
+                    },
+                    {
+                      "key": "usbPort",
+                      "value": "{{devicePort}}"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Date",
+                  "value": "Tue, 05 Dec 2023 03:45:51 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "136"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                }
+              ],
+              "cookie": [],
+              "body": "```json\n{\n    \"code\": 497,\n    \"msg\": \"Không tìm thấy máy in, vui lòng kết nối máy in và thử lại.\"\n}\n```"
+            }
+          ]
+        },
+        {
+          "name": "【Tùy chọn | Máy in mạng】Tìm kiếm máy in mạng trong mạng cục bộ.",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "description": "API key dành cho nhà phát triển mà bạn đã đăng ký.",
+                "key": "ApiKey",
+                "type": "text",
+                "value": "{{ApiKey}}"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/api/printer/refresh_network_printer?deviceId={{deviceId}}&deviceKey={{deviceKey}}",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "api",
+                "printer",
+                "refresh_network_printer"
+              ],
+              "query": [
+                {
+                  "key": "deviceId",
+                  "value": "{{deviceId}}",
+                  "description": "ID thiết bị"
+                },
+                {
+                  "key": "",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "deviceKey",
+                  "value": "{{deviceKey}}"
+                }
+              ]
+            },
+            "description": "*** Giao diện này chỉ dành cho máy in mạng, không hỗ trợ máy in kết nối qua USB. ***\n\nGiao diện này sẽ tìm kiếm các máy in mạng được hỗ trợ trong mạng cục bộ của thiết bị và trả về tổng số máy in được tìm thấy.\n\nTheo mặc định, thiết bị sẽ tự động gọi giao diện này một lần khi khởi động và chỉ gọi một lần nữa trong vòng 12 giờ, ngay cả khi thiết bị được khởi động lại nhiều lần."
+          },
+          "response": []
+        },
+        {
+          "name": "【Ưu đãi có thời hạn】Nhận số trang của tài liệu/PDF.",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "// save JWT value for auth",
+                  "pm.environment.set(\"task_id\", jsonData.data.task_id);",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "ApiKey",
+                "value": "{{ApiKey}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "deviceId",
+                  "value": "{{deviceId}}",
+                  "type": "text"
+                },
+                {
+                  "key": "deviceKey",
+                  "value": "{{deviceKey}}",
+                  "type": "text"
+                },
+                {
+                  "key": "devicePort",
+                  "value": "{{devicePort}}",
+                  "type": "text"
+                },
+                {
+                  "key": "printerModel",
+                  "value": "{{printerModel}}",
+                  "type": "text"
+                },
+                {
+                  "key": "dmPaperSize",
+                  "value": "9",
+                  "description": "Kích thước giấy sẽ ảnh hưởng đến số trang cuối cùng, vui lòng tham khảo giao diện in.",
+                  "type": "text"
+                },
+                {
+                  "key": "jobFile",
+                  "description": "Tệp, có thể sử dụng URL.",
+                  "type": "file",
+                  "src": "Hollow-Clock-4.pdf"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{url}}/api/print/file_pages",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "api",
+                "print",
+                "file_pages"
+              ]
+            },
+            "description": "**Giao diện này đang trong giai đoạn thử nghiệm, được cung cấp miễn phí trong thời gian giới hạn. Dịch vụ miễn phí này không có cam kết về mức độ dịch vụ (SLA). Sau này, giá sẽ được tính dựa trên mức độ sử dụng thực tế.**\n\nNếu giao diện này không đáp ứng được yêu cầu của bạn, Alibaba Cloud có các dịch vụ tương tự, bạn có thể sử dụng giao diện của Alibaba Cloud để thay thế chức năng này.\n\nLưu ý:\n\n1. Mỗi lần chỉ hỗ trợ một tệp duy nhất.\n\n2. Giao diện này có thời gian xử lý yêu cầu khá lâu, vì vậy khi sử dụng URL, việc tải xuống tệp phải hoàn thành trong vòng 5 giây.\n\n3. Tệp tải lên không được lớn hơn 20MB.\n\n4. Không được phép thử lại liên tục với cùng một tệp bị lỗi. Nếu số lần thử vượt quá một giới hạn nhất định, yêu cầu sẽ bị tạm thời chặn."
+          },
+          "response": []
+        },
+        {
+          "name": "Gỡ bỏ giới hạn do số lần in bị lỗi quá nhiều.",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"deviceId\": \"{{deviceId}}\",\n    \"deviceKey\": \"{{deviceKey}}\",\n    \"devicePort\": \"{{devicePort}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/api/print/reset_printing_error_limit",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "api",
+                "print",
+                "reset_printing_error_limit"
+              ]
+            },
+            "description": "Trong một số trường hợp, một thiết bị đơn lẻ gặp sự cố, nhưng vẫn tiếp tục khởi tạo in. Sau khi in thất bại liên tục 30 lần, hệ thống sẽ kích hoạt cơ chế hạn chế. Lúc này, có thể thông báo cho người dùng để kiểm tra và khắc phục sự cố của máy in hoặc thiết bị. Sau khi hoàn tất, có thể sử dụng giao diện này để hủy bỏ cơ chế hạn chế. Giao diện này có thể được gọi tối đa 10 lần mỗi ngày cho mỗi thiết bị, vui lòng sử dụng hợp lý.\n\nGiá trị trả về\n\n| **code** | **msg** | **Ý nghĩa** |\n|---|---|---|\n| 200 | success | Xóa lỗi tác vụ thành công |\n| 10009 | 请求频繁 | Chỉ cho phép một yêu cầu cho mỗi thiết bị trong một khoảng thời gian nhất định |\n| 11200 | 重置打印失败限制失败，当天重置次数超过限制 | Đã đạt đến giới hạn số lần đặt lại tối đa mỗi ngày |\n| 11201 | 暂无打印失败记录，无法重置 | Không có bản ghi lỗi in, không thể đặt lại |"
+          },
+          "response": []
+        },
+        {
+          "name": "Khởi động lại giao diện thiết bị.",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "ApiKey",
+                "value": "{{ApiKey}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"deviceId\": \"{{deviceId}}\",\n    \"deviceKey\": \"{{deviceKey}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/api/device/async_device_reboot",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "api",
+                "device",
+                "async_device_reboot"
+              ]
+            },
+            "description": "Sau khi khởi động lại thiết bị, thiết bị sẽ không thể in trong quá trình khởi động lại, vui lòng thực hiện thao tác cẩn thận; giao diện này không hỗ trợ thực hiện đồng thời, sau khi khởi tạo, quá trình khởi động lại sẽ được thực hiện không đồng bộ.\n\nGiá trị trả về\n\n| **code** | **msg** | **Ý nghĩa** |\n| --- | --- | --- |\n| 200 | success | Khởi động lại thành công |\n| 401 | 正在重启中 | Trả về khi đang thực hiện thao tác khởi động lại sau khi nhận yêu cầu |\n| 5002 | 设备已离线，请检查云指示灯 | Khởi động lại yêu cầu thiết bị phải ở trạng thái trực tuyến |"
+          },
+          "response": []
+        },
+        {
+          "name": "Lấy danh sách các khổ giấy mà máy in hỗ trợ.",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "ApiKey",
+                "value": "{{ApiKey}}",
+                "description": "API key dành cho nhà phát triển mà bạn đã đăng ký.",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": []
+            },
+            "url": {
+              "raw": "{{url}}/api/print/paper_dimension_list?printerModel={{printerModel}}",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "api",
+                "print",
+                "paper_dimension_list"
+              ],
+              "query": [
+                {
+                  "key": "printerModel",
+                  "value": "{{printerModel}}",
+                  "description": "Mẫu máy in, tương ứng với `driver_name` trong `printer_list`."
+                }
+              ]
+            },
+            "description": "Lấy các tham số của máy in đích:\n\n- `printerModel`: Tên kiểu máy in, tương ứng với `driver_name` trong `printer_list`.\n\nGiá trị trả về:\n\n- `physical_height`: Chiều cao vật lý của giấy, đơn vị là 0,1 mm.\n- `physical_width`: Chiều rộng vật lý của giấy, đơn vị là 0,1 mm.\n- `printable_height`: Chiều cao của vùng có thể in, đơn vị là 0,1 mm.\n- `printable_width`: Chiều rộng của vùng có thể in, đơn vị là 0,1 mm.\n- `paper_id`: ID của loại giấy, tương ứng với `dmPaperSize`."
+          },
+          "response": [
+            {
+              "name": "Kích thước máy in.",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "ApiKey",
+                    "value": "{{ApiKey}}",
+                    "description": "API key dành cho nhà phát triển mà bạn đã đăng ký.",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "https://{{url}}/api/print/paper_dimension_list?printerModel={{printerModel}}",
+                  "protocol": "https",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "print",
+                    "paper_dimension_list"
+                  ],
+                  "query": [
+                    {
+                      "key": "printerModel",
+                      "value": "{{printerModel}}",
+                      "description": "Mẫu máy in, tương ứng với `driver_name` trong `printer_list`."
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Server",
+                  "value": "nginx"
+                },
+                {
+                  "key": "Date",
+                  "value": "Wed, 28 Jun 2023 10:34:01 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "2106"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Access-Control-Allow-Methods",
+                  "value": "GET, POST, OPTIONS, DELETE"
+                },
+                {
+                  "key": "Access-Control-Allow-Headers",
+                  "value": "DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Authorization,ApiKey,SESSION-ID"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"code\": 200,\n    \"msg\": \"success\",\n    \"data\": {\n        \"16K\": {\n            \"paper_id\": 257,\n            \"physical_height\": 2730,\n            \"physical_width\": 1968,\n            \"printable_height\": 2650,\n            \"printable_width\": 1840\n        },\n        \"8.5x13\": {\n            \"paper_id\": 258,\n            \"physical_height\": 3302,\n            \"physical_width\": 2159,\n            \"printable_height\": 3220,\n            \"printable_width\": 2060\n        },\n        \"明信片\": {\n            \"paper_id\": 260,\n            \"physical_height\": 1480,\n            \"physical_width\": 1000,\n            \"printable_height\": 1400,\n            \"printable_width\": 870\n        },\n        \"双面明信片\": {\n            \"paper_id\": 261,\n            \"physical_height\": 2000,\n            \"physical_width\": 1480,\n            \"printable_height\": 1920,\n            \"printable_width\": 1350\n        },\n        \"A6\": {\n            \"paper_id\": 262,\n            \"physical_height\": 1480,\n            \"physical_width\": 1050,\n            \"printable_height\": 1400,\n            \"printable_width\": 920\n        },\n        \"B5 (ISO)\": {\n            \"paper_id\": 259,\n            \"physical_height\": 2500,\n            \"physical_width\": 1760,\n            \"printable_height\": 2420,\n            \"printable_width\": 1680\n        },\n        \"B5 (JIS)\": {\n            \"paper_id\": 13,\n            \"physical_height\": 2570,\n            \"physical_width\": 1820,\n            \"printable_height\": 2490,\n            \"printable_width\": 1730\n        },\n        \"Monarch 信封\": {\n            \"paper_id\": 37,\n            \"physical_height\": 1905,\n            \"physical_width\": 983,\n            \"printable_height\": 1820,\n            \"printable_width\": 870\n        },\n        \"B5 信封\": {\n            \"paper_id\": 34,\n            \"physical_height\": 2500,\n            \"physical_width\": 1760,\n            \"printable_height\": 2420,\n            \"printable_width\": 1680\n        },\n        \"C5 信封\": {\n            \"paper_id\": 28,\n            \"physical_height\": 2290,\n            \"physical_width\": 1620,\n            \"printable_height\": 2210,\n            \"printable_width\": 1520\n        },\n        \"DL 信封\": {\n            \"paper_id\": 27,\n            \"physical_height\": 2200,\n            \"physical_width\": 1100,\n            \"printable_height\": 2120,\n            \"printable_width\": 980\n        },\n        \"10 号信封\": {\n            \"paper_id\": 20,\n            \"physical_height\": 2413,\n            \"physical_width\": 1046,\n            \"printable_height\": 2330,\n            \"printable_width\": 920\n        },\n        \"A5\": {\n            \"paper_id\": 11,\n            \"physical_height\": 2100,\n            \"physical_width\": 1480,\n            \"printable_height\": 2020,\n            \"printable_width\": 1350\n        },\n        \"A4\": {\n            \"paper_id\": 9,\n            \"physical_height\": 2970,\n            \"physical_width\": 2100,\n            \"printable_height\": 2890,\n            \"printable_width\": 2000\n        },\n        \"Executive\": {\n            \"paper_id\": 7,\n            \"physical_height\": 2667,\n            \"physical_width\": 1842,\n            \"printable_height\": 2580,\n            \"printable_width\": 1730\n        },\n        \"Legal\": {\n            \"paper_id\": 5,\n            \"physical_height\": 3556,\n            \"physical_width\": 2159,\n            \"printable_height\": 3470,\n            \"printable_width\": 2060\n        },\n        \"Letter\": {\n            \"paper_id\": 1,\n            \"physical_height\": 2794,\n            \"physical_width\": 2159,\n            \"printable_height\": 2710,\n            \"printable_width\": 2060\n        }\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Xóa tất cả các tác vụ đang chờ xử lý.",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "ApiKey",
+                "value": "{{ApiKey}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"deviceId\": \"{{deviceId}}\",\n    \"deviceKey\": \"{{deviceKey}}\",\n    \"devicePort\": {{devicePort}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/api/print/flush_jobs",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "api",
+                "print",
+                "flush_jobs"
+              ]
+            },
+            "description": "Sau khi gọi giao diện này, hàng đợi chờ in sẽ bị xóa, nhưng các tác vụ đang in sẽ không bị hủy."
+          },
+          "response": [
+            {
+              "name": "Xóa tất cả các tác vụ đang chờ xử lý - Kết quả tác vụ",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "ApiKey",
+                    "value": "{{ApiKey}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"deviceId\": \"{{deviceId}}\",\n    \"deviceKey\": \"{{deviceKey}}\",\n    \"devicePort\": {{devicePort}}\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "https://{{url}}/api/print/flush_jobs",
+                  "protocol": "https",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "print",
+                    "flush_jobs"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Server",
+                  "value": "nginx"
+                },
+                {
+                  "key": "Date",
+                  "value": "Wed, 22 Nov 2023 09:05:26 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "52"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Access-Control-Allow-Private-Network",
+                  "value": "true"
+                },
+                {
+                  "key": "Access-Control-Allow-Methods",
+                  "value": "GET, POST, OPTIONS, DELETE"
+                },
+                {
+                  "key": "Access-Control-Allow-Headers",
+                  "value": "DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Authorization,ApiKey"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"code\": 200,\n    \"data\": {\n        \"queue_num\": 3\n    },\n    \"msg\": \"success\"\n}"
+            }
+          ]
+        }
+      ],
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              ""
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              ""
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "url",
+      "value": "https://cloud.liankenet.com"
+    }
+  ]
+}
